@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Header, Details } from '@widgets/categoryDetails'
+import { Header, Details } from '@widgets/menuItemDetails'
 
 const Root = styled.div`
   flex: 1;
@@ -8,7 +8,7 @@ const Root = styled.div`
   overflow: hidden;
 `
 
-export const CategoryDetails = () => {
+export const MenuItemDetails = () => {
     return (
         <Root>
             <Header />

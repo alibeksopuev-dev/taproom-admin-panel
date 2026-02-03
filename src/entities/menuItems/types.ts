@@ -18,13 +18,6 @@ export interface MenuItem {
     image_url: string | null
     metadata: Record<string, unknown>
     is_disabled: boolean
-    ibu?: number | null
-    abv?: number | null
-    wine_region?: string | null
-    wine_country?: string | null
-    wine_grape_variety?: string | null
-    wine_style?: string | null
-    display_order?: number
     created_at: string
     updated_at: string
     category?: Category

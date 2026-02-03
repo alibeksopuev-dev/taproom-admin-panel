@@ -1,18 +1,20 @@
 import styled from 'styled-components'
-import { Header, Details } from '@widgets/categoryDetails'
+import { Header, MenuItemsTable } from '@widgets/menuItems'
 
 const Root = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  padding: 24px;
+  gap: 16px;
 `
 
-export const CategoryDetails = () => {
+export const MenuItems = () => {
     return (
         <Root>
             <Header />
-            <Details />
+            <MenuItemsTable />
         </Root>
     )
 }

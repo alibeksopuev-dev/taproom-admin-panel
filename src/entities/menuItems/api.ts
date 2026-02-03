@@ -17,19 +17,12 @@ type CreateMenuItemRequest = {
     image_url?: string | null
     metadata?: Record<string, unknown>
     is_disabled?: boolean
-    ibu?: number | null
-    abv?: number | null
-    wine_region?: string | null
-    wine_country?: string | null
-    wine_grape_variety?: string | null
-    wine_style?: string | null
-    display_order?: number
     prices?: { size: string; price: number }[]
 }
 
 type UpdateMenuItemRequest = {
     id: string
-    data: Partial<CreateMenuItemRequest>
+    data: Partial<Omit<CreateMenuItemRequest, 'organization_id'>>
 }
 
 export const menuItemsApi = baseApi.injectEndpoints({
@@ -39,7 +32,7 @@ export const menuItemsApi = baseApi.injectEndpoints({
                 let query = supabase
                     .from('menu_items')
                     .select('*, category:categories(*), prices:price_per_size(*)', { count: 'exact' })
-                    .order('display_order', { ascending: true })
+                    .order('name', { ascending: true })
                     .range(offset, offset + limit - 1)
 
                 if (filters?.organization_id) {

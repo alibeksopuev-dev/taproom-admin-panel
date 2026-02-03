@@ -5,6 +5,10 @@ import { Categories } from '@pages/categories'
 import { CategoryDetails } from '@pages/categoryDetails'
 import { CategoryCreate } from '@pages/categoryCreate'
 import { CategoryEdit } from '@pages/categoryEdit'
+import { MenuItems } from '@pages/menuItems'
+import { MenuItemDetails } from '@pages/menuItemDetails'
+import { MenuItemCreate } from '@pages/menuItemCreate'
+import { MenuItemEdit } from '@pages/menuItemEdit'
 
 export const router = createBrowserRouter([
     {
@@ -43,19 +47,19 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'menu-items',
-                element: <div>Menu Items (Coming Soon)</div>,
-            },
-            {
-                path: 'menu-items/:id',
-                element: <div>Menu Item Details (Coming Soon)</div>,
-            },
-            {
-                path: 'menu-items/:id/edit',
-                element: <div>Edit Menu Item (Coming Soon)</div>,
+                element: <MenuItems />,
             },
             {
                 path: 'menu-items/create',
-                element: <div>Create Menu Item (Coming Soon)</div>,
+                element: <MenuItemCreate />,
+            },
+            {
+                path: 'menu-items/:id',
+                element: <MenuItemDetails />,
+            },
+            {
+                path: 'menu-items/:id/edit',
+                element: <MenuItemEdit />,
             },
         ],
     },
