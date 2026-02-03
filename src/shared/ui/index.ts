@@ -34,11 +34,24 @@ export { default as InputAdornment } from '@mui/material/InputAdornment'
 export { default as Paper } from '@mui/material/Paper'
 export { default as Divider } from '@mui/material/Divider'
 
+// MUI Table aliases (for TableV2 pattern)
+export { default as MuiTable } from '@mui/material/Table'
+export { default as MuiTableBody } from '@mui/material/TableBody'
+export { default as MuiTableCell } from '@mui/material/TableCell'
+export { default as MuiTableContainer, type TableContainerProps } from '@mui/material/TableContainer'
+export { default as MuiTableHead } from '@mui/material/TableHead'
+export { default as MuiTableRow } from '@mui/material/TableRow'
+
 // Custom components
 export { DetailRow, DetailKey, DetailValue } from './AbstractTable'
 export { Header } from './Header'
 export { Sidebar, useSidebarOpen } from './Sidebar'
 export { TableSkeleton } from './TableSkeleton'
+export { TableV2 } from './Table'
+export type { TableProps, Original } from './Table'
+export { SelectRowsPerPage } from './SelectRowsPerPage'
+export { TableResizer } from './TableResizer'
 
 // Icons
 export * from './icons'
+

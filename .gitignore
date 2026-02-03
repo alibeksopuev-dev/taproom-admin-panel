@@ -34,3 +34,4 @@ dist-ssr
 .ops/.helm/charts/*
 .werf-report.json
 
+node_modules
