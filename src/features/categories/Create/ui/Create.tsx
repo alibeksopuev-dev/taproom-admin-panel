@@ -16,8 +16,6 @@ import { Root, FormContainer, ButtonContainer } from './styled'
 interface FormValues {
     name: string
     slug: string
-    icon: string
-    display_order: number
 }
 
 const generateSlug = (name: string): string => {
@@ -44,8 +42,6 @@ export const Create = () => {
         defaultValues: {
             name: '',
             slug: '',
-            icon: '📋',
-            display_order: 0,
         },
         mode: 'onChange',
     })
@@ -66,8 +62,6 @@ export const Create = () => {
                 organization_id: user.id,
                 name: data.name,
                 slug: data.slug,
-                icon: data.icon || undefined,
-                display_order: data.display_order || 0,
             }).unwrap()
 
             navigate('/categories')
@@ -130,44 +124,6 @@ export const Create = () => {
                                     error={!!error}
                                     helperText={error?.message || 'Auto-generated from name'}
                                     fullWidth
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            backgroundColor: '#1e293b',
-                                        },
-                                    }}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="icon"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    label="Icon"
-                                    helperText="Enter an emoji (e.g., 🍺, 🍷, 🍔)"
-                                    fullWidth
-                                    sx={{
-                                        '& .MuiOutlinedInput-root': {
-                                            backgroundColor: '#1e293b',
-                                        },
-                                    }}
-                                />
-                            )}
-                        />
-
-                        <Controller
-                            name="display_order"
-                            control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    type="number"
-                                    label="Display Order"
-                                    helperText="Lower numbers appear first"
-                                    fullWidth
-                                    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                     sx={{
                                         '& .MuiOutlinedInput-root': {
                                             backgroundColor: '#1e293b',

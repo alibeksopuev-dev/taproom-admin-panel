@@ -4,7 +4,6 @@ import {
     Header,
     Button,
     Box,
-    Chip,
     Typography,
     Breadcrumbs,
     Link,
@@ -123,18 +122,6 @@ export const CategoryDetails = () => {
                         <DetailRow>
                             <DetailKey>Slug</DetailKey>
                             <DetailValue>{category.slug}</DetailValue>
-                        </DetailRow>
-                        <DetailRow>
-                            <DetailKey>Icon</DetailKey>
-                            <DetailValue>
-                                <span style={{ fontSize: 24 }}>{category.icon || '📋'}</span>
-                            </DetailValue>
-                        </DetailRow>
-                        <DetailRow>
-                            <DetailKey>Display Order</DetailKey>
-                            <DetailValue>
-                                <Chip label={category.display_order ?? 0} size="small" sx={{ bgcolor: '#334155' }} />
-                            </DetailValue>
                         </DetailRow>
                         <DetailRow>
                             <DetailKey>Created At</DetailKey>

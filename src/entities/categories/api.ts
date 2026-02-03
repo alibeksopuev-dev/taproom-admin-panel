@@ -12,13 +12,11 @@ type CreateCategoryRequest = {
     organization_id: string
     name: string
     slug: string
-    icon?: string
-    display_order?: number
 }
 
 type UpdateCategoryRequest = {
     id: string
-    data: Partial<CreateCategoryRequest>
+    data: Partial<Omit<CreateCategoryRequest, 'organization_id'>>
 }
 
 export const categoriesApi = baseApi.injectEndpoints({
