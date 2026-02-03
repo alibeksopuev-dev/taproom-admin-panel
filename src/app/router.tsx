@@ -9,6 +9,10 @@ import { MenuItems } from '@pages/menuItems'
 import { MenuItemDetails } from '@pages/menuItemDetails'
 import { MenuItemCreate } from '@pages/menuItemCreate'
 import { MenuItemEdit } from '@pages/menuItemEdit'
+import { Organizations } from '@pages/organizations'
+import { OrganizationDetails } from '@pages/organizationDetails'
+import { OrganizationCreate } from '@pages/organizationCreate'
+import { OrganizationEdit } from '@pages/organizationEdit'
 
 export const router = createBrowserRouter([
     {
@@ -60,6 +64,22 @@ export const router = createBrowserRouter([
             {
                 path: 'menu-items/:id/edit',
                 element: <MenuItemEdit />,
+            },
+            {
+                path: 'organizations',
+                element: <Organizations />,
+            },
+            {
+                path: 'organizations/create',
+                element: <OrganizationCreate />,
+            },
+            {
+                path: 'organizations/:id',
+                element: <OrganizationDetails />,
+            },
+            {
+                path: 'organizations/:id/edit',
+                element: <OrganizationEdit />,
             },
         ],
     },

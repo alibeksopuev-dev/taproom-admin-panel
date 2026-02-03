@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import { Category, MenuBook } from '@shared/ui/icons'
+import { Category, MenuBook, Settings } from '@shared/ui/icons'
 
 const NavItem = styled(NavLink) <{ $active?: boolean }>`
   display: flex;
@@ -40,26 +40,27 @@ const NavList = styled.div`
 `
 
 const navItems = [
-    { path: '/categories', label: 'Categories', icon: Category },
-    { path: '/menu-items', label: 'Menu Items', icon: MenuBook },
+  { path: '/organizations', label: 'Organizations', icon: Settings },
+  { path: '/categories', label: 'Categories', icon: Category },
+  { path: '/menu-items', label: 'Menu Items', icon: MenuBook },
 ]
 
 export const Navigation = () => {
-    const location = useLocation()
+  const location = useLocation()
 
-    return (
-        <NavList>
-            {navItems.map((item) => {
-                const isActive = location.pathname.startsWith(item.path)
-                const Icon = item.icon
+  return (
+    <NavList>
+      {navItems.map((item) => {
+        const isActive = location.pathname.startsWith(item.path)
+        const Icon = item.icon
 
-                return (
-                    <NavItem key={item.path} to={item.path} $active={isActive}>
-                        <Icon width={20} height={20} />
-                        <NavLabel>{item.label}</NavLabel>
-                    </NavItem>
-                )
-            })}
-        </NavList>
-    )
+        return (
+          <NavItem key={item.path} to={item.path} $active={isActive}>
+            <Icon width={20} height={20} />
+            <NavLabel>{item.label}</NavLabel>
+          </NavItem>
+        )
+      })}
+    </NavList>
+  )
 }

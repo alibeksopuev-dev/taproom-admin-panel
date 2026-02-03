@@ -58,6 +58,23 @@ export const organizationsApi = baseApi.injectEndpoints({
             providesTags: (_result, _error, { id }) => [{ type: 'Organization', id }],
         }),
 
+        createOrganization: create.mutation<Organization, Omit<Organization, 'id' | 'created_at' | 'updated_at'>>({
+            queryFn: async (orgData) => {
+                const { data, error } = await supabase
+                    .from('organizations')
+                    .insert(orgData)
+                    .select()
+                    .single()
+
+                if (error) {
+                    return { error: { status: error.code, data: error.message } }
+                }
+
+                return { data }
+            },
+            invalidatesTags: ['Organizations'],
+        }),
+
         updateOrganization: create.mutation<Organization, UpdateOrganizationRequest>({
             queryFn: async ({ id, data: updateData }) => {
                 const { data, error } = await supabase
