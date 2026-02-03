@@ -3,6 +3,8 @@ import { MainLayout, AuthLayout } from './layouts'
 import { Auth } from '@pages/auth'
 import { Categories } from '@pages/categories'
 import { CategoryDetails } from '@pages/categoryDetails'
+import { CategoryCreate } from '@pages/categoryCreate'
+import { CategoryEdit } from '@pages/categoryEdit'
 
 export const router = createBrowserRouter([
     {
@@ -28,16 +30,16 @@ export const router = createBrowserRouter([
                 element: <Categories />,
             },
             {
+                path: 'categories/create',
+                element: <CategoryCreate />,
+            },
+            {
                 path: 'categories/:id',
                 element: <CategoryDetails />,
             },
             {
                 path: 'categories/:id/edit',
-                element: <div>Edit Category (Coming Soon)</div>,
-            },
-            {
-                path: 'categories/create',
-                element: <div>Create Category (Coming Soon)</div>,
+                element: <CategoryEdit />,
             },
             {
                 path: 'menu-items',
