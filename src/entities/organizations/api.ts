@@ -1,6 +1,6 @@
 import { baseApi } from '@shared/api'
 import { supabase } from '@shared/api/supabase'
-import type { Organization, OrganizationsResponse, OrganizationFilters } from './types'
+import type { Organization, OrganizationsResponse, OrganizationFilters, CreateOrganizationRequest } from './types'
 
 type GetOrganizationsParams = {
     limit: number
@@ -58,7 +58,7 @@ export const organizationsApi = baseApi.injectEndpoints({
             providesTags: (_result, _error, { id }) => [{ type: 'Organization', id }],
         }),
 
-        createOrganization: create.mutation<Organization, Omit<Organization, 'id' | 'created_at' | 'updated_at'>>({
+        createOrganization: create.mutation<Organization, CreateOrganizationRequest>({
             queryFn: async (orgData) => {
                 const { data, error } = await supabase
                     .from('organizations')

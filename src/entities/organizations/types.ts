@@ -12,6 +12,10 @@ export interface Organization {
     updated_at: string
 }
 
+export type CreateOrganizationRequest = Omit<Organization, 'id' | 'created_at' | 'updated_at'> & {
+    id?: string // Optional user ID to attach organization to
+}
+
 export interface OrganizationFilters {
     name?: string
     is_disabled?: boolean

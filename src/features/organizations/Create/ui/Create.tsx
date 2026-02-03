@@ -21,6 +21,7 @@ interface FormValues {
     logo_url: string
     primary_color: string
     is_disabled: boolean
+    id: string
 }
 
 const generateSlug = (name: string): string => {
@@ -52,6 +53,7 @@ export const Create = () => {
             logo_url: '',
             primary_color: '#3b82f6',
             is_disabled: false,
+            id: '',
         },
         mode: 'onChange',
     })
@@ -69,6 +71,7 @@ export const Create = () => {
                 logo_url: data.logo_url || null,
                 primary_color: data.primary_color,
                 is_disabled: data.is_disabled,
+                id: data.id || undefined,
             }).unwrap()
 
             navigate(`/organizations/${result.id}`)
@@ -131,6 +134,20 @@ export const Create = () => {
                                         label="Slug *"
                                         error={!!error}
                                         helperText={error?.message}
+                                        fullWidth
+                                        sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
+                                    />
+                                )}
+                            />
+
+                            <Controller
+                                name="id"
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        label="User ID"
+                                        placeholder="Enter user ID to attach"
                                         fullWidth
                                         sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
                                     />
