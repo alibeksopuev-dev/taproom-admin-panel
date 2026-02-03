@@ -6,7 +6,6 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding: 24px;
   gap: 16px;
 `
 

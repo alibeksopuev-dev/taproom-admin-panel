@@ -47,7 +47,7 @@ export const LoginForm = () => {
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
             <Box sx={{ textAlign: 'center', mb: 2 }}>
                 <Typography variant="h4" sx={{ fontWeight: 700, color: '#f1f5f9' }}>
-                    🍺 Taproom Admin
+                    Menu Admin
                 </Typography>
                 <Typography sx={{ color: '#9ca3af', mt: 1 }}>
                     Sign in to manage your menu

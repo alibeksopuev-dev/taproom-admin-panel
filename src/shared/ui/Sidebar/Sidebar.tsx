@@ -64,8 +64,8 @@ interface SidebarProps {
 export const Sidebar = ({
   navigation,
   footer,
-  logo = '🍺 Taproom',
-  logoShort = '🍺',
+  logo = 'Menu Admin',
+  logoShort = 'Menu',
 }: SidebarProps) => {
   const [open, setOpen] = useState(true)
 
