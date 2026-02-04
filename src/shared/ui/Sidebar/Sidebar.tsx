@@ -1,7 +1,6 @@
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import MuiDrawer from '@mui/material/Drawer'
-import { Menu } from '../icons'
 
 const DRAWER_WIDTH = 240
 const DRAWER_WIDTH_COLLAPSED = 72
