@@ -1,7 +1,6 @@
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 import MuiDrawer from '@mui/material/Drawer'
-import IconButton from '@mui/material/IconButton'
 import { Menu } from '../icons'
 
 const DRAWER_WIDTH = 240
@@ -66,18 +65,12 @@ export const Sidebar = ({
   logo = 'Menu Admin',
   logoShort = 'Menu',
 }: SidebarProps) => {
-  const [open, setOpen] = useState(true)
+  const [open] = useState(true)
 
   return (
     <StyledDrawer variant="permanent" $open={open}>
       <SidebarHeader $open={open}>
         <Logo $open={open}>{open ? logo : logoShort}</Logo>
-        <IconButton
-          onClick={() => setOpen(!open)}
-          sx={{ color: '#9ca3af' }}
-        >
-          <Menu width={20} height={20} />
-        </IconButton>
       </SidebarHeader>
       <Navigation>{navigation}</Navigation>
       {footer && <Footer>{footer}</Footer>}
