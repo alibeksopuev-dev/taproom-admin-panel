@@ -191,8 +191,8 @@ export const Create = () => {
                                 control={control}
                                 render={({ field }) => (
                                     <FormControlLabel
-                                        control={<Switch checked={field.value} onChange={field.onChange} />}
-                                        label="Disabled"
+                                        control={<Switch checked={!field.value} onChange={field.onChange} />}
+                                        label="Enabled"
                                         sx={{ color: '#f1f5f9' }}
                                     />
                                 )}
@@ -226,7 +226,7 @@ export const Create = () => {
                                                 <TextField
                                                     {...field}
                                                     type="number"
-                                                    label="Price (₸)"
+                                                    label="Price (VND)"
                                                     onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                                     sx={{ flex: 1, '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
                                                 />

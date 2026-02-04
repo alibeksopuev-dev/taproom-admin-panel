@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { MainLayout, AuthLayout } from './layouts'
+import { AppLoader, AuthorizedLoader, UnAuthorizedLoader } from './loaders'
 import { Auth } from '@pages/auth'
 import { Categories } from '@pages/categories'
 import { CategoryDetails } from '@pages/categoryDetails'
@@ -16,70 +17,83 @@ import { OrganizationEdit } from '@pages/organizationEdit'
 
 export const router = createBrowserRouter([
     {
-        path: '/',
-        element: <AuthLayout />,
+        element: <AppLoader />,
         children: [
             {
-                path: 'login',
-                element: <Auth />,
+                path: '/',
+                element: (
+                    <UnAuthorizedLoader>
+                        <AuthLayout />
+                    </UnAuthorizedLoader>
+                ),
+                children: [
+                    {
+                        path: 'login',
+                        element: <Auth />,
+                    },
+                    {
+                        index: true,
+                        element: <Navigate to="/categories" replace />,
+                    },
+                ],
             },
             {
-                index: true,
-                element: <Navigate to="/categories" replace />,
-            },
-        ],
-    },
-    {
-        path: '/',
-        element: <MainLayout />,
-        children: [
-            {
-                path: 'categories',
-                element: <Categories />,
-            },
-            {
-                path: 'categories/create',
-                element: <CategoryCreate />,
-            },
-            {
-                path: 'categories/:id',
-                element: <CategoryDetails />,
-            },
-            {
-                path: 'categories/:id/edit',
-                element: <CategoryEdit />,
-            },
-            {
-                path: 'menu-items',
-                element: <MenuItems />,
-            },
-            {
-                path: 'menu-items/create',
-                element: <MenuItemCreate />,
-            },
-            {
-                path: 'menu-items/:id',
-                element: <MenuItemDetails />,
-            },
-            {
-                path: 'menu-items/:id/edit',
-                element: <MenuItemEdit />,
-            },
-            {
-                path: 'organizations',
-                element: <Organizations />,
-            },
-            {
-                path: 'organizations/create',
-                element: <OrganizationCreate />,
-            },
-            {
-                path: 'organizations/:id',
-                element: <OrganizationDetails />,
-            },
-            {
-                path: 'organizations/:id/edit',
-                element: <OrganizationEdit />,
+                path: '/',
+                element: (
+                    <AuthorizedLoader>
+                        <MainLayout />
+                    </AuthorizedLoader>
+                ),
+                children: [
+                    {
+                        path: 'categories',
+                        element: <Categories />,
+                    },
+                    {
+                        path: 'categories/create',
+                        element: <CategoryCreate />,
+                    },
+                    {
+                        path: 'categories/:id',
+                        element: <CategoryDetails />,
+                    },
+                    {
+                        path: 'categories/:id/edit',
+                        element: <CategoryEdit />,
+                    },
+                    {
+                        path: 'menu-items',
+                        element: <MenuItems />,
+                    },
+                    {
+                        path: 'menu-items/create',
+                        element: <MenuItemCreate />,
+                    },
+                    {
+                        path: 'menu-items/:id',
+                        element: <MenuItemDetails />,
+                    },
+                    {
+                        path: 'menu-items/:id/edit',
+                        element: <MenuItemEdit />,
+                    },
+                    {
+                        path: 'organizations',
+                        element: <Organizations />,
+                    },
+                    {
+                        path: 'organizations/create',
+                        element: <OrganizationCreate />,
+                    },
+                    {
+                        path: 'organizations/:id',
+                        element: <OrganizationDetails />,
+                    },
+                    {
+                        path: 'organizations/:id/edit',
+                        element: <OrganizationEdit />,
+                    },
+                ],
             },
         ],
     },

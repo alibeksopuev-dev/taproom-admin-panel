@@ -37,7 +37,7 @@ export const LogoContainer = styled.div`
 export const LogoImage = styled.img`
   width: 100px;
   height: 100px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 8px;
   background-color: #334155;
 `

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -15,6 +15,7 @@ import {
     Switch,
     IconButton,
     CircularProgress,
+    DeleteModal,
 } from '@shared/ui'
 import { Plus, Delete } from '@shared/ui/icons'
 import { Root, FormContainer, ButtonContainer, Section, PricesContainer, PriceRow } from './styled'
@@ -43,6 +44,9 @@ export const Edit = () => {
     )
     const { data: categoriesData } = categoriesApi.useGetCategoriesQuery({ limit: 100, offset: 0 })
     const [updateMenuItem, { isLoading: isUpdating }] = menuItemsApi.useUpdateMenuItemMutation()
+    const [deleteMenuItem] = menuItemsApi.useDeleteMenuItemMutation()
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
     const {
         control,
@@ -106,6 +110,16 @@ export const Edit = () => {
         }
     }
 
+    const handleDelete = async () => {
+        if (!id) return
+        try {
+            await deleteMenuItem({ id }).unwrap()
+            navigate('/menu-items')
+        } catch (error) {
+            console.error('Failed to delete menu item:', error)
+        }
+    }
+
     if (isFetching) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100%">
@@ -127,9 +141,15 @@ export const Edit = () => {
             <Header
                 title={`Edit: ${menuItem.name}`}
                 action={
-                    <Button variant="outlined" onClick={() => navigate(`/menu-items/${id}`)}>
-                        Cancel
-                    </Button>
+                    <Box display="flex" gap="12px">
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={() => setIsDeleteModalOpen(true)}
+                        >
+                            Delete
+                        </Button>
+                    </Box>
                 }
             />
             <Root>
@@ -229,8 +249,8 @@ export const Edit = () => {
                                 control={control}
                                 render={({ field }) => (
                                     <FormControlLabel
-                                        control={<Switch checked={field.value} onChange={field.onChange} />}
-                                        label="Disabled"
+                                        control={<Switch checked={!field.value} onChange={field.onChange} />}
+                                        label="Enabled"
                                         sx={{ color: '#f1f5f9' }}
                                     />
                                 )}
@@ -264,7 +284,7 @@ export const Edit = () => {
                                                 <TextField
                                                     {...field}
                                                     type="number"
-                                                    label="Price (₸)"
+                                                    label="Price (VND)"
                                                     onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                                     sx={{ flex: 1, '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
                                                 />
@@ -302,6 +322,12 @@ export const Edit = () => {
                     </ButtonContainer>
                 </Box>
             </Root>
+            <DeleteModal
+                open={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                entityName="Menu Item"
+                onConfirm={handleDelete}
+            />
         </Box>
     )
 }

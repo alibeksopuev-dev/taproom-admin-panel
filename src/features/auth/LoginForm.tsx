@@ -9,8 +9,8 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 100%;
-  max-width: 400px;
+  width:100%;
+  min-width: 300px;
 `
 
 const ErrorText = styled.div`

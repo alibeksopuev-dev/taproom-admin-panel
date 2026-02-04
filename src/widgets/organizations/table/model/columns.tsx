@@ -1,28 +1,34 @@
 import { Organization } from '@entities/organizations'
-import { Typography, Chip, Box } from '@shared/ui'
+import { Typography, Chip } from '@shared/ui'
 import { createColumnHelper } from '@tanstack/react-table'
 
 const columnHelper = createColumnHelper<Organization>()
 
 export const columns = [
+    columnHelper.accessor(({ logo_url }) => logo_url, {
+        id: 'logo',
+        header: 'Logo',
+        cell: ({ getValue }) => (
+            getValue() ? (
+                <img
+                    src={getValue() || ''}
+                    alt="Organization Logo"
+                    style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'contain' }}
+                />
+            ) : 'N/A'
+        ),
+        size: 50,
+        enableSorting: false,
+    }),
     columnHelper.accessor(({ name }) => name, {
         id: 'name',
         header: 'Name',
-        cell: ({ row, getValue }) => (
-            <Box display="flex" alignItems="center" gap={2}>
-                {row.original.logo_url && (
-                    <img
-                        src={row.original.logo_url}
-                        alt={getValue()}
-                        style={{ width: 32, height: 32, borderRadius: 4, objectFit: 'cover' }}
-                    />
-                )}
-                <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
-                    {getValue()}
-                </Typography>
-            </Box>
+        cell: ({ getValue }) => (
+            <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
+                {getValue()}
+            </Typography>
         ),
-        size: 250,
+        size: 200,
     }),
     columnHelper.accessor(({ slug }) => slug, {
         id: 'slug',
