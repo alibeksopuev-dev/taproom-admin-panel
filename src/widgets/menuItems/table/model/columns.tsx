@@ -55,7 +55,7 @@ export const columns = [
                     {prices.slice(0, 2).map((p) => (
                         <Chip
                             key={p.id}
-                            label={`${p.size}: ${p.price}₸`}
+                            label={`${p.size}: ${p.price} VND`}
                             size="small"
                             sx={{ bgcolor: '#334155', color: '#f1f5f9', fontSize: 11 }}
                         />

@@ -99,7 +99,7 @@ export const Details = () => {
                                     {price.size}
                                 </Typography>
                                 <Typography sx={{ color: '#f1f5f9', fontSize: 18, fontWeight: 600 }}>
-                                    {price.price.toLocaleString()}₸
+                                    {price.price.toLocaleString()} VND
                                 </Typography>
                             </PriceCard>
                         ))}
