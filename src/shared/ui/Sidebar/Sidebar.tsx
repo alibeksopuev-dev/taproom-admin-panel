@@ -28,7 +28,6 @@ const SidebarHeader = styled.div<{ $open: boolean }>`
   justify-content: ${({ $open }) => ($open ? 'space-between' : 'center')};
   padding: 16px;
   min-height: 64px;
-  border-bottom: 1px solid #334155;
 `
 
 const Logo = styled.div<{ $open: boolean }>`
