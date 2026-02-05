@@ -59,7 +59,6 @@ export const Create = () => {
 
         try {
             await createCategory({
-                organization_id: user.id,
                 name: data.name,
                 slug: data.slug,
             }).unwrap()

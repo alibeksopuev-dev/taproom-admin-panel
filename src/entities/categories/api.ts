@@ -9,7 +9,6 @@ type GetCategoriesParams = {
 }
 
 type CreateCategoryRequest = {
-    organization_id: string
     name: string
     slug: string
 }
