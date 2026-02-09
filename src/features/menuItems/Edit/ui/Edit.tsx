@@ -249,8 +249,8 @@ export const Edit = () => {
                                 control={control}
                                 render={({ field }) => (
                                     <FormControlLabel
-                                        control={<Switch checked={!field.value} onChange={field.onChange} />}
-                                        label="Enabled"
+                                        control={<Switch checked={field.value} onChange={field.onChange} />}
+                                        label="Disabled"
                                         sx={{ color: '#f1f5f9' }}
                                     />
                                 )}
