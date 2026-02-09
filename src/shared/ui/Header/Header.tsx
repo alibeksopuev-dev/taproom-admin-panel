@@ -26,7 +26,7 @@ export const Header = ({ title, subtitle, action }: HeaderProps) => {
         <HeaderRoot>
             <TitleContainer>
                 {typeof title === 'string' ? (
-                    <Box component="h1" sx={{ fontSize: 24, fontWeight: 600, color: '#f1f5f9', m: 0 }}>
+                    <Box component="h1" sx={{ fontSize: 20, fontWeight: 600, color: '#f1f5f9', m: 0 }}>
                         {title}
                     </Box>
                 ) : (

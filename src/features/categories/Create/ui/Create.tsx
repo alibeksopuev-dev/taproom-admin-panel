@@ -73,11 +73,6 @@ export const Create = () => {
         <Box display="flex" flexDirection="column" height="100%" width="100%">
             <Header
                 title="Create Category"
-                action={
-                    <Button variant="outlined" onClick={() => navigate('/categories')}>
-                        Cancel
-                    </Button>
-                }
             />
             <Root>
                 <Box

@@ -16,7 +16,10 @@ import {
     IconButton,
     CircularProgress,
     DeleteModal,
+    MetadataEditor,
+    Chip,
 } from '@shared/ui'
+import type { MetadataEntry } from '@shared/ui'
 import { Plus, Delete } from '@shared/ui/icons'
 import { Root, FormContainer, ButtonContainer, Section, PricesContainer, PriceRow } from './styled'
 
@@ -33,6 +36,7 @@ interface FormValues {
     image_url: string
     is_disabled: boolean
     prices: PriceInput[]
+    metadata: MetadataEntry[]
 }
 
 export const Edit = () => {
@@ -53,6 +57,8 @@ export const Edit = () => {
         handleSubmit,
         reset,
         formState: { isValid, isDirty },
+        setValue,
+        watch,
     } = useForm<FormValues>({
         defaultValues: {
             name: '',
@@ -62,6 +68,7 @@ export const Edit = () => {
             image_url: '',
             is_disabled: false,
             prices: [{ size: '', price: 0 }],
+            metadata: [],
         },
         mode: 'onChange',
     })
@@ -71,8 +78,26 @@ export const Edit = () => {
         name: 'prices',
     })
 
+    const metadata = watch('metadata')
+
+    // Add preset metadata field
+    const addPresetField = (key: string, value: string = '') => {
+        const existing = metadata.find(m => m.key === key)
+        if (!existing) {
+            setValue('metadata', [...metadata, { key, value }])
+        }
+    }
+
     useEffect(() => {
         if (menuItem) {
+            // Convert metadata object to array
+            const metadataArray: MetadataEntry[] = menuItem.metadata
+                ? Object.entries(menuItem.metadata).map(([key, value]) => ({
+                    key,
+                    value: String(value)
+                }))
+                : []
+
             reset({
                 name: menuItem.name,
                 description: menuItem.description ?? '',
@@ -81,6 +106,7 @@ export const Edit = () => {
                 image_url: menuItem.image_url ?? '',
                 is_disabled: menuItem.is_disabled,
                 prices: menuItem.prices?.length ? menuItem.prices.map(p => ({ size: p.size, price: p.price })) : [{ size: '', price: 0 }],
+                metadata: metadataArray,
             })
         }
     }, [menuItem, reset])
@@ -90,6 +116,14 @@ export const Edit = () => {
 
         try {
             const validPrices = data.prices.filter(p => p.size && p.price > 0)
+
+            // Convert metadata array to object
+            const metadataObject: Record<string, unknown> = {}
+            data.metadata.forEach(entry => {
+                if (entry.key && entry.value) {
+                    metadataObject[entry.key] = entry.value
+                }
+            })
 
             await updateMenuItem({
                 id,
@@ -101,6 +135,7 @@ export const Edit = () => {
                     image_url: data.image_url || null,
                     is_disabled: data.is_disabled,
                     prices: validPrices,
+                    metadata: metadataObject,
                 },
             }).unwrap()
 
@@ -283,7 +318,7 @@ export const Edit = () => {
                                             render={({ field }) => (
                                                 <TextField
                                                     {...field}
-                                                    type="number"
+                                                    type="string"
                                                     label="Price (VND)"
                                                     onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                                     sx={{ flex: 1, '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
@@ -304,6 +339,26 @@ export const Edit = () => {
                                     Add Price
                                 </Button>
                             </PricesContainer>
+                        </Section>
+
+                        <Section>
+                            <Typography sx={{ fontSize: 18, fontWeight: 600, color: '#f1f5f9' }}>
+                                Metadata
+                            </Typography>
+                            <Typography sx={{ fontSize: 14, color: '#9ca3af', mb: 1 }}>
+                                Add custom metadata like IBU, ABV for beers or region, country for wines
+                            </Typography>
+                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
+                                <Typography sx={{ fontSize: 12, color: '#9ca3af', width: '100%', mb: 0.5 }}>Quick add:</Typography>
+                                <Chip label="+ ibu" size="small" onClick={() => addPresetField('ibu')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ abv" size="small" onClick={() => addPresetField('abv')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ region" size="small" onClick={() => addPresetField('region')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ country" size="small" onClick={() => addPresetField('country')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ grapeVariety" size="small" onClick={() => addPresetField('grapeVariety')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ brewery" size="small" onClick={() => addPresetField('brewery')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ origin" size="small" onClick={() => addPresetField('origin')} sx={{ cursor: 'pointer' }} />
+                            </Box>
+                            <MetadataEditor control={control} name="metadata" />
                         </Section>
                     </FormContainer>
 

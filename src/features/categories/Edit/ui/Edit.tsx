@@ -88,11 +88,6 @@ export const Edit = () => {
         <Box display="flex" flexDirection="column" height="100%" width="100%">
             <Header
                 title={`Edit: ${category.name}`}
-                action={
-                    <Button variant="outlined" onClick={() => navigate(`/categories/${id}`)}>
-                        Cancel
-                    </Button>
-                }
             />
             <Root>
                 <Box

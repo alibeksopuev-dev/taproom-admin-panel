@@ -84,11 +84,6 @@ export const Create = () => {
         <Box display="flex" flexDirection="column" height="100%" width="100%">
             <Header
                 title="Create Organization"
-                action={
-                    <Button variant="outlined" onClick={() => navigate('/organizations')}>
-                        Cancel
-                    </Button>
-                }
             />
             <Root>
                 <Box

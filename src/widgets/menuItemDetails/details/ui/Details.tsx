@@ -109,16 +109,42 @@ export const Details = () => {
                 )}
             </Section>
 
+            {menuItem.metadata && Object.keys(menuItem.metadata).length > 0 && (
+                <Section>
+                    <SectionTitle>Product Metadata</SectionTitle>
+                    <DetailsGrid>
+                        {Object.entries(menuItem.metadata).map(([key, value]) => (
+                            <DetailRow key={key}>
+                                <DetailKey>{key}</DetailKey>
+                                <DetailValue>
+                                    <Typography variant="body2" sx={{ color: '#f1f5f9' }}>
+                                        {String(value)}
+                                    </Typography>
+                                </DetailValue>
+                            </DetailRow>
+                        ))}
+                    </DetailsGrid>
+                </Section>
+            )}
+
             <Section>
-                <SectionTitle>Metadata</SectionTitle>
+                <SectionTitle>Timestamps</SectionTitle>
                 <DetailsGrid>
                     <DetailRow>
                         <DetailKey>Created At</DetailKey>
-                        <DetailValue>{dateHelpers.formatDate(menuItem.created_at)}</DetailValue>
+                        <DetailValue>
+                            <Typography variant="body2" sx={{ color: '#f1f5f9' }}>
+                                {dateHelpers.formatDate(menuItem.created_at)}
+                            </Typography>
+                        </DetailValue>
                     </DetailRow>
                     <DetailRow>
                         <DetailKey>Updated At</DetailKey>
-                        <DetailValue>{dateHelpers.formatDate(menuItem.updated_at)}</DetailValue>
+                        <DetailValue>
+                            <Typography variant="body2" sx={{ color: '#f1f5f9' }}>
+                                {dateHelpers.formatDate(menuItem.updated_at)}
+                            </Typography>
+                        </DetailValue>
                     </DetailRow>
                 </DetailsGrid>
             </Section>

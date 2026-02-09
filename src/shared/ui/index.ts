@@ -45,6 +45,8 @@ export { default as MuiTableRow } from '@mui/material/TableRow'
 // Custom components
 export { DetailRow, DetailKey, DetailValue } from './AbstractTable'
 export { DeleteModal } from './DeleteModal'
+export { MetadataEditor } from './MetadataEditor'
+export type { MetadataEntry } from './MetadataEditor'
 export { Header } from './Header'
 export { Sidebar, useSidebarOpen } from './Sidebar'
 export { TableSkeleton } from './TableSkeleton'

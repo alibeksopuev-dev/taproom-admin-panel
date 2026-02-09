@@ -14,7 +14,10 @@ import {
     FormControlLabel,
     Switch,
     IconButton,
+    MetadataEditor,
+    Chip,
 } from '@shared/ui'
+import type { MetadataEntry } from '@shared/ui'
 import { Plus, Delete } from '@shared/ui/icons'
 import { Root, FormContainer, ButtonContainer, Section, PricesContainer, PriceRow } from './styled'
 
@@ -31,6 +34,7 @@ interface FormValues {
     image_url: string
     is_disabled: boolean
     prices: PriceInput[]
+    metadata: MetadataEntry[]
 }
 
 export const Create = () => {
@@ -43,6 +47,8 @@ export const Create = () => {
         control,
         handleSubmit,
         formState: { isValid },
+        setValue,
+        watch,
     } = useForm<FormValues>({
         defaultValues: {
             name: '',
@@ -52,6 +58,7 @@ export const Create = () => {
             image_url: '',
             is_disabled: false,
             prices: [{ size: '', price: 0 }],
+            metadata: [],
         },
         mode: 'onChange',
     })
@@ -61,11 +68,29 @@ export const Create = () => {
         name: 'prices',
     })
 
+    const metadata = watch('metadata')
+
+    // Add preset metadata field
+    const addPresetField = (key: string, value: string = '') => {
+        const existing = metadata.find(m => m.key === key)
+        if (!existing) {
+            setValue('metadata', [...metadata, { key, value }])
+        }
+    }
+
     const onSubmit = async (data: FormValues) => {
         if (!user?.id) return
 
         try {
             const validPrices = data.prices.filter(p => p.size && p.price > 0)
+
+            // Convert metadata array to object
+            const metadataObject: Record<string, unknown> = {}
+            data.metadata.forEach(entry => {
+                if (entry.key && entry.value) {
+                    metadataObject[entry.key] = entry.value
+                }
+            })
 
             await createMenuItem({
                 organization_id: user.id,
@@ -76,6 +101,7 @@ export const Create = () => {
                 image_url: data.image_url || null,
                 is_disabled: data.is_disabled,
                 prices: validPrices,
+                metadata: metadataObject,
             }).unwrap()
 
             navigate('/menu-items')
@@ -88,11 +114,6 @@ export const Create = () => {
         <Box display="flex" flexDirection="column" height="100%" width="100%">
             <Header
                 title="Create Menu Item"
-                action={
-                    <Button variant="outlined" onClick={() => navigate('/menu-items')}>
-                        Cancel
-                    </Button>
-                }
             />
             <Root>
                 <Box
@@ -225,7 +246,7 @@ export const Create = () => {
                                             render={({ field }) => (
                                                 <TextField
                                                     {...field}
-                                                    type="number"
+                                                    type="string"
                                                     label="Price (VND)"
                                                     onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                                     sx={{ flex: 1, '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
@@ -246,6 +267,26 @@ export const Create = () => {
                                     Add Price
                                 </Button>
                             </PricesContainer>
+                        </Section>
+
+                        <Section>
+                            <Typography sx={{ fontSize: 18, fontWeight: 600, color: '#f1f5f9' }}>
+                                Metadata
+                            </Typography>
+                            <Typography sx={{ fontSize: 14, color: '#9ca3af', mb: 1 }}>
+                                Add custom metadata like IBU, ABV for beers or region, country for wines
+                            </Typography>
+                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
+                                <Typography sx={{ fontSize: 12, color: '#9ca3af', width: '100%', mb: 0.5 }}>Quick add:</Typography>
+                                <Chip label="+ ibu" size="small" onClick={() => addPresetField('ibu')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ abv" size="small" onClick={() => addPresetField('abv')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ region" size="small" onClick={() => addPresetField('region')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ country" size="small" onClick={() => addPresetField('country')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ grapeVariety" size="small" onClick={() => addPresetField('grapeVariety')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ brewery" size="small" onClick={() => addPresetField('brewery')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ origin" size="small" onClick={() => addPresetField('origin')} sx={{ cursor: 'pointer' }} />
+                            </Box>
+                            <MetadataEditor control={control} name="metadata" />
                         </Section>
                     </FormContainer>
 
