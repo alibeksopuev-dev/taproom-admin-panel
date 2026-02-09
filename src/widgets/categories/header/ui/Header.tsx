@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Header as UiHeader, Button } from '@shared/ui'
+import { Header as UiHeader, Button, Box } from '@shared/ui'
 import { Plus } from '@shared/ui/icons'
 
 export const Header = () => {
@@ -14,7 +14,7 @@ export const Header = () => {
                     startIcon={<Plus color="#fff" />}
                     onClick={() => navigate('/categories/create')}
                 >
-                    Add Category
+                    Create
                 </Button>
             }
         />
