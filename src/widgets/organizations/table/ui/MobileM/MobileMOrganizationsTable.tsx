@@ -10,7 +10,6 @@ import dayjs from 'dayjs'
 const Root = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 16px;
     gap: 8px;
 `
 
