@@ -11,6 +11,7 @@ import { formatPrice } from '@shared/lib'
 const Root = styled.div`
     display: flex;
     flex-direction: column;
+    padding: 16px;
     gap: 8px;
 `
 
