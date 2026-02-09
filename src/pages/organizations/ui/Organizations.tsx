@@ -6,7 +6,6 @@ const Root = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  gap: 16px;
 `
 
 export const Organizations = () => {
