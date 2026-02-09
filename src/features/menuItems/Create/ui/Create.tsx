@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { menuItemsApi } from '@entities/menuItems'
 import { categoriesApi } from '@entities/categories'
-import { selectUser } from '@entities/session'
 import {
     Box,
     Button,
@@ -42,7 +40,6 @@ export const Create = () => {
     const navigate = useNavigate()
     const [createMenuItem, { isLoading }] = menuItemsApi.useCreateMenuItemMutation()
     const { data: categoriesData } = categoriesApi.useGetCategoriesQuery({ limit: 100, offset: 0 })
-    const user = useSelector(selectUser)
 
     const {
         control,
@@ -94,7 +91,7 @@ export const Create = () => {
             })
 
             await createMenuItem({
-                organization_id: user.id,
+                organization_id: 'dbd4b576-8e6b-474f-b04e-a983b414fa5f',
                 name: data.name,
                 description: data.description || null,
                 category_id: data.category_id || null,
