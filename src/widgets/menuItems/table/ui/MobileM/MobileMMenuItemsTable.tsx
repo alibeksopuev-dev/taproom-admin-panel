@@ -5,7 +5,6 @@ import { menuItemsApi, MenuItem } from '@entities/menuItems'
 import { Typography, Chip, Divider, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import styled from 'styled-components'
-import dayjs from 'dayjs'
 import { formatPrice } from '@shared/lib'
 
 const Root = styled.div`
@@ -17,7 +16,7 @@ const Root = styled.div`
 const Card = styled.div`
     background-color: #0f172a;
     border-radius: 12px;
-    padding: 16px;
+    padding: 16px 24px;
     cursor: pointer;
     transition: background-color 0.2s;
 
@@ -98,13 +97,6 @@ export const MobileMMenuItemsTable = () => {
         )
     }
 
-    const getPrice = (item: MenuItem) => {
-        const prices = item.prices || []
-        if (prices.length === 0) return '-'
-        const firstPrice = prices[0]
-        return formatPrice(firstPrice.price)
-    }
-
     return (
         <Root>
             {allMenuItems.map((item) => (
@@ -115,9 +107,11 @@ export const MobileMMenuItemsTable = () => {
                                 <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
                                     {item.name}
                                 </Typography>
-                                <Typography variant="body2" sx={{ color: '#774CFF', fontWeight: 600 }}>
-                                    {getPrice(item)}
-                                </Typography>
+                                {item.category && (
+                                    <Typography variant="caption" sx={{ color: '#9ca3af', display: 'block', mt: 0.5 }}>
+                                        {item.category.name}
+                                    </Typography>
+                                )}
                             </Box>
                             <Chip
                                 size="small"
@@ -130,14 +124,42 @@ export const MobileMMenuItemsTable = () => {
                             />
                         </CardHeader>
                         <CardBody>
+                            {item.subcategory && (
+                                <Chip
+                                    size="small"
+                                    label={item.subcategory}
+                                    sx={{
+                                        backgroundColor: '#334155',
+                                        color: '#cbd5e1',
+                                        fontSize: 11,
+                                        height: 20,
+                                        mb: 1,
+                                        width: 'fit-content',
+                                    }}
+                                />
+                            )}
                             {item.description && (
-                                <Typography variant="body2" sx={{ color: '#9ca3af', mb: 0.5 }} noWrap>
+                                <Typography variant="body2" sx={{ color: '#9ca3af', mb: 1 }} noWrap>
                                     {item.description}
                                 </Typography>
                             )}
-                            <Typography variant="body2" sx={{ color: '#9CA3AF' }}>
-                                {dayjs(item.created_at).format('D MMM, YYYY h:mm A')}
-                            </Typography>
+                            {item.prices && item.prices.length > 0 && (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                                    {item.prices.map((priceOption) => (
+                                        <Chip
+                                            key={priceOption.id}
+                                            size="small"
+                                            label={`${priceOption.size} - ${formatPrice(priceOption.price)}`}
+                                            sx={{
+                                                backgroundColor: '#1e293b',
+                                                color: '#774CFF',
+                                                fontWeight: 600,
+                                                fontSize: 12,
+                                            }}
+                                        />
+                                    ))}
+                                </Box>
+                            )}
                         </CardBody>
                     </Card>
                     <Divider sx={{ backgroundColor: '#334155' }} />

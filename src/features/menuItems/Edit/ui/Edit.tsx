@@ -18,6 +18,7 @@ import {
     DeleteModal,
     MetadataEditor,
     Chip,
+    FileUploadInput,
 } from '@shared/ui'
 import type { MetadataEntry } from '@shared/ui'
 import { Plus, Delete } from '@shared/ui/icons'
@@ -270,12 +271,45 @@ export const Edit = () => {
                                 name="image_url"
                                 control={control}
                                 render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        label="Image URL"
-                                        fullWidth
-                                        sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
-                                    />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                        <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#f1f5f9' }}>
+                                            Product Image
+                                        </Typography>
+                                        <FileUploadInput
+                                            onChange={(file) => {
+                                                // Create a local URL for image preview
+                                                const url = URL.createObjectURL(file)
+                                                field.onChange(url)
+                                            }}
+                                        />
+                                        {field.value && (
+                                            <Box
+                                                component="img"
+                                                src={field.value}
+                                                alt="Product preview"
+                                                onClick={() => field.value && window.open(field.value, '_blank')}
+                                                sx={{
+                                                    width: 128,
+                                                    height: 128,
+                                                    objectFit: 'cover',
+                                                    border: '2px solid #475569',
+                                                    borderRadius: 1,
+                                                    cursor: 'pointer',
+                                                    '&:hover': {
+                                                        opacity: 0.8,
+                                                    },
+                                                }}
+                                            />
+                                        )}
+                                        <TextField
+                                            {...field}
+                                            value={field.value || ''}
+                                            label="Image URL"
+                                            placeholder="Or enter image URL manually"
+                                            fullWidth
+                                            sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
+                                        />
+                                    </Box>
                                 )}
                             />
 
