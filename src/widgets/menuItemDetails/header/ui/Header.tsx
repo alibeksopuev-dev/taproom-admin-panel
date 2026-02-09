@@ -41,7 +41,7 @@ export const Header = () => {
                     variant="contained"
                     onClick={() => navigate(`/menu-items/${id}/edit`)}
                 >
-                    Edit Menu Item
+                    Edit
                 </Button>
             }
         />
