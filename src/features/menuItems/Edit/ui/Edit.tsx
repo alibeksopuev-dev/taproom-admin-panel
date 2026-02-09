@@ -4,6 +4,7 @@ import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { menuItemsApi } from '@entities/menuItems'
 import { categoriesApi } from '@entities/categories'
+import { uploadMedia } from '@entities/media'
 import {
     Box,
     Button,
@@ -52,6 +53,7 @@ export const Edit = () => {
     const [deleteMenuItem] = menuItemsApi.useDeleteMenuItemMutation()
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    const [isUploading, setIsUploading] = useState(false)
 
     const {
         control,
@@ -111,6 +113,19 @@ export const Edit = () => {
             })
         }
     }, [menuItem, reset])
+
+    const handleFileUpload = async (file: File, onSuccess: (url: string) => void) => {
+        setIsUploading(true)
+        try {
+            const result = await uploadMedia({ file })
+            onSuccess(result.publicUrl)
+        } catch (error) {
+            console.error('Upload failed:', error)
+            alert('Failed to upload image. Please try again.')
+        } finally {
+            setIsUploading(false)
+        }
+    }
 
     const onSubmit = async (data: FormValues) => {
         if (!id) return
@@ -275,14 +290,19 @@ export const Edit = () => {
                                         <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#f1f5f9' }}>
                                             Product Image
                                         </Typography>
-                                        <FileUploadInput
-                                            onChange={(file) => {
-                                                // Create a local URL for image preview
-                                                const url = URL.createObjectURL(file)
-                                                field.onChange(url)
-                                            }}
-                                        />
-                                        {field.value && (
+                                        {isUploading ? (
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 3, bgcolor: '#1e293b', borderRadius: 1 }}>
+                                                <CircularProgress size={20} />
+                                                <Typography sx={{ color: '#94a3b8', fontSize: 14 }}>
+                                                    Uploading image...
+                                                </Typography>
+                                            </Box>
+                                        ) : (
+                                            <FileUploadInput
+                                                onChange={(file) => handleFileUpload(file, field.onChange)}
+                                            />
+                                        )}
+                                        {field.value && !isUploading && (
                                             <Box
                                                 component="img"
                                                 src={field.value}

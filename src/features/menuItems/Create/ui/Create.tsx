@@ -1,7 +1,9 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import { menuItemsApi } from '@entities/menuItems'
 import { categoriesApi } from '@entities/categories'
+import { uploadMedia } from '@entities/media'
 import {
     Box,
     Button,
@@ -15,6 +17,7 @@ import {
     MetadataEditor,
     Chip,
     FileUploadInput,
+    CircularProgress,
 } from '@shared/ui'
 import type { MetadataEntry } from '@shared/ui'
 import { Plus, Delete } from '@shared/ui/icons'
@@ -40,6 +43,7 @@ export const Create = () => {
     const navigate = useNavigate()
     const [createMenuItem, { isLoading }] = menuItemsApi.useCreateMenuItemMutation()
     const { data: categoriesData } = categoriesApi.useGetCategoriesQuery({ limit: 100, offset: 0 })
+    const [isUploading, setIsUploading] = React.useState(false)
 
     const {
         control,
@@ -76,9 +80,20 @@ export const Create = () => {
         }
     }
 
-    const onSubmit = async (data: FormValues) => {
-        if (!user?.id) return
+    const handleFileUpload = async (file: File, onSuccess: (url: string) => void) => {
+        setIsUploading(true)
+        try {
+            const result = await uploadMedia({ file })
+            onSuccess(result.publicUrl)
+        } catch (error) {
+            console.error('Upload failed:', error)
+            alert('Failed to upload image. Please try again.')
+        } finally {
+            setIsUploading(false)
+        }
+    }
 
+    const onSubmit = async (data: FormValues) => {
         try {
             const validPrices = data.prices.filter(p => p.size && p.price > 0)
 
@@ -200,14 +215,19 @@ export const Create = () => {
                                         <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#f1f5f9' }}>
                                             Product Image
                                         </Typography>
-                                        <FileUploadInput
-                                            onChange={(file) => {
-                                                // Create a local URL for image preview
-                                                const url = URL.createObjectURL(file)
-                                                field.onChange(url)
-                                            }}
-                                        />
-                                        {field.value && (
+                                        {isUploading ? (
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 3, bgcolor: '#1e293b', borderRadius: 1 }}>
+                                                <CircularProgress size={20} />
+                                                <Typography sx={{ color: '#94a3b8', fontSize: 14 }}>
+                                                    Uploading image...
+                                                </Typography>
+                                            </Box>
+                                        ) : (
+                                            <FileUploadInput
+                                                onChange={(file) => handleFileUpload(file, field.onChange)}
+                                            />
+                                        )}
+                                        {field.value && !isUploading && (
                                             <Box
                                                 component="img"
                                                 src={field.value}
