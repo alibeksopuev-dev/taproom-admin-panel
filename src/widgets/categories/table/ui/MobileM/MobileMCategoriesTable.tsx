@@ -15,7 +15,7 @@ const Root = styled.div`
 const Card = styled.div`
     background-color: #0f172a;
     border-radius: 12px;
-    padding: 16px;
+    padding: 16px 24px;
     cursor: pointer;
     transition: background-color 0.2s;
 

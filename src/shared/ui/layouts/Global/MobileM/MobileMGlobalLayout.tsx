@@ -25,6 +25,7 @@ const Logo = styled.div`
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-left: 10px;
 `
 
 const Content = styled.main`
