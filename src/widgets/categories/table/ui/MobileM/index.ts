@@ -1,0 +1,1 @@
+export { MobileMCategoriesTable } from './MobileMCategoriesTable'

@@ -2,7 +2,40 @@ import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/st
 import CssBaseline from '@mui/material/CssBaseline'
 import { ReactNode } from 'react'
 
+// Extend MUI theme to support custom breakpoints
+declare module '@mui/material/styles' {
+    interface BreakpointOverrides {
+        xs: false
+        sm: false
+        md: false
+        lg: false
+        xl: false
+        mini: true
+        mobileS: true
+        mobileM: true
+        mobileL: true
+        tablet: true
+        laptop: true
+        laptopL: true
+        desktop: true
+        max: true
+    }
+}
+
 const theme = createTheme({
+    breakpoints: {
+        values: {
+            mini: 0,
+            mobileS: 320,
+            mobileM: 375,
+            mobileL: 425,
+            tablet: 768,
+            laptop: 1024,
+            laptopL: 1440,
+            desktop: 1920,
+            max: 2560,
+        },
+    },
     palette: {
         mode: 'dark',
         primary: {
@@ -28,6 +61,7 @@ const theme = createTheme({
         warning: {
             main: '#f59e0b',
         },
+        divider: '#334155',
     },
     typography: {
         fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -46,6 +80,13 @@ const theme = createTheme({
                     boxShadow: 'none',
                     '&:hover': {
                         boxShadow: 'none',
+                    },
+                },
+                outlined: {
+                    borderColor: '#334155',
+                    '&:hover': {
+                        borderColor: '#774CFF',
+                        backgroundColor: 'rgba(119, 76, 255, 0.04)',
                     },
                 },
             },
@@ -100,6 +141,13 @@ const theme = createTheme({
             styleOverrides: {
                 root: {
                     fontWeight: 600,
+                },
+            },
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    backgroundImage: 'none',
                 },
             },
         },

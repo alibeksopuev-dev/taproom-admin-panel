@@ -1,0 +1,1 @@
+export { MobileMGlobalLayout } from './MobileMGlobalLayout'

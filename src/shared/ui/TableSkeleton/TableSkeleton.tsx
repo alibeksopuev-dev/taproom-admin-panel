@@ -16,13 +16,13 @@ export const TableSkeleton = ({
     rowsCount = 10,
 }: TableSkeletonProps) => {
     return (
-        <TableContainer>
+        <TableContainer sx={{ backgroundColor: '#0f172a', borderRadius: '12px 12px 0 0' }}>
             <Table>
                 <TableHead>
                     <TableRow>
                         {Array.from({ length: columnsCount }).map((_, i) => (
-                            <TableCell key={i}>
-                                <Skeleton variant="text" width={80} />
+                            <TableCell key={i} sx={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
+                                <Skeleton variant="text" width={80} sx={{ bgcolor: '#334155' }} />
                             </TableCell>
                         ))}
                     </TableRow>
@@ -31,8 +31,8 @@ export const TableSkeleton = ({
                     {Array.from({ length: rowsCount }).map((_, rowIndex) => (
                         <TableRow key={rowIndex}>
                             {Array.from({ length: columnsCount }).map((_, colIndex) => (
-                                <TableCell key={colIndex}>
-                                    <Skeleton variant="text" width="80%" />
+                                <TableCell key={colIndex} sx={{ borderBottom: '1px solid #334155' }}>
+                                    <Skeleton variant="text" width="80%" sx={{ bgcolor: '#334155' }} />
                                 </TableCell>
                             ))}
                         </TableRow>
@@ -42,3 +42,4 @@ export const TableSkeleton = ({
         </TableContainer>
     )
 }
+

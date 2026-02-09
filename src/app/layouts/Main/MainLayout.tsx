@@ -16,12 +16,12 @@ const Content = styled.main`
 `
 
 export const MainLayout = () => {
-    return (
-        <Root>
-            <Sidebar />
-            <Content>
-                <Outlet />
-            </Content>
-        </Root>
-    )
+  return (
+    <Root>
+      <Sidebar />
+      <Content>
+        <Outlet />
+      </Content>
+    </Root>
+  )
 }

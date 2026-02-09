@@ -53,6 +53,9 @@ export type { TableProps, Original } from './Table'
 export { SelectRowsPerPage } from './SelectRowsPerPage'
 export { TableResizer } from './TableResizer'
 
+// Layouts
+export { GlobalLayout } from './layouts/Global'
+
 // Icons
 export * from './icons'
 

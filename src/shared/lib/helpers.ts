@@ -29,7 +29,7 @@ export const getPagination = ({
     }
 }
 
-export const formatPrice = (price: number, currency = '₸') => {
+export const formatPrice = (price: number, currency = 'VND') => {
     return `${price.toLocaleString()} ${currency}`
 }
 

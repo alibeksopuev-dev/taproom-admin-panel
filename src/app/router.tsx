@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import { MainLayout, AuthLayout } from './layouts'
+import { AuthLayout } from './layouts'
 import { AppLoader, AuthorizedLoader, UnAuthorizedLoader } from './loaders'
+import { GlobalLayout } from '@shared/ui'
 import { Auth } from '@pages/auth'
 import { Categories } from '@pages/categories'
 import { CategoryDetails } from '@pages/categoryDetails'
@@ -41,7 +42,7 @@ export const router = createBrowserRouter([
                 path: '/',
                 element: (
                     <AuthorizedLoader>
-                        <MainLayout />
+                        <GlobalLayout />
                     </AuthorizedLoader>
                 ),
                 children: [

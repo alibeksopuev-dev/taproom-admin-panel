@@ -1,0 +1,1 @@
+export { LaptopOrganizationsTable } from './LaptopOrganizationsTable'
