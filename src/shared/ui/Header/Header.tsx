@@ -7,7 +7,6 @@ const HeaderRoot = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  border-bottom: 1px solid #334155;
 `
 
 const TitleContainer = styled.div`

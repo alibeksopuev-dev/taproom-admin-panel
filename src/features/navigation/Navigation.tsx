@@ -1,6 +1,8 @@
 import { NavLink, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import { Category, MenuBook, Settings } from '@shared/ui/icons'
+import BusinessIcon from '@mui/icons-material/Business'
+import CategoryIcon from '@mui/icons-material/Category'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 
 const NavItem = styled(NavLink) <{ $active?: boolean }>`
   display: flex;
@@ -9,7 +11,7 @@ const NavItem = styled(NavLink) <{ $active?: boolean }>`
   padding: 12px 16px;
   border-radius: 8px;
   text-decoration: none;
-  color: ${({ $active }) => ($active ? '#f1f5f9' : '#9ca3af')};
+  color: ${({ $active }) => ($active ? '#774CFF' : '#9ca3af')};
   background-color: ${({ $active }) => ($active ? 'rgba(119, 76, 255, 0.15)' : 'transparent')};
   transition: all 0.2s ease;
 
@@ -18,19 +20,25 @@ const NavItem = styled(NavLink) <{ $active?: boolean }>`
     color: #f1f5f9;
   }
 
-  svg path {
-    stroke: ${({ $active }) => ($active ? '#774CFF' : '#9ca3af')};
-    transition: stroke 0.2s ease;
+  &.active {
+    color: #774CFF;
   }
 
-  &:hover svg path {
-    stroke: #774CFF;
+  svg {
+    // MUI icons inherit color, so we can control color via 'color' property on NavItem or specifically here
+    color: ${({ $active }) => ($active ? '#774CFF' : '#9ca3af')};
+    transition: color 0.2s ease;
+  }
+
+  &:hover svg {
+    color: #774CFF;
   }
 `
 
 const NavLabel = styled.span`
   font-size: 14px;
   font-weight: 500;
+  color: #f1f5f9;
 `
 
 const NavList = styled.div`
@@ -40,9 +48,9 @@ const NavList = styled.div`
 `
 
 const navItems = [
-  { path: '/organizations', label: 'Organizations', icon: Settings },
-  { path: '/categories', label: 'Categories', icon: Category },
-  { path: '/menu-items', label: 'Menu Items', icon: MenuBook },
+  { path: '/organizations', label: 'Organizations', icon: BusinessIcon },
+  { path: '/categories', label: 'Categories', icon: CategoryIcon },
+  { path: '/menu-items', label: 'Menu Items', icon: RestaurantMenuIcon },
 ]
 
 export const Navigation = () => {
@@ -56,7 +64,7 @@ export const Navigation = () => {
 
         return (
           <NavItem key={item.path} to={item.path} $active={isActive}>
-            <Icon width={20} height={20} />
+            <Icon />
             <NavLabel>{item.label}</NavLabel>
           </NavItem>
         )

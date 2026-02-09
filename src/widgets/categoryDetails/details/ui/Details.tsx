@@ -2,13 +2,14 @@ import { useParams } from 'react-router-dom'
 import { categoriesApi } from '@entities/categories'
 import { dateHelpers } from '@shared/lib'
 import {
-    Typography,
     CircularProgress,
     DetailRow,
     DetailKey,
     DetailValue,
     Box,
+    Typography,
 } from '@shared/ui'
+import { TypographyVariant } from '@shared/ui/AbstractTable/AbstractTable'
 import { Root, Section, SectionTitle, DetailsGrid } from './styled'
 
 export const Details = () => {
@@ -44,19 +45,35 @@ export const Details = () => {
                 <DetailsGrid>
                     <DetailRow>
                         <DetailKey>Name</DetailKey>
-                        <DetailValue>{category.name}</DetailValue>
+                        <DetailValue>
+                            <Typography variant={TypographyVariant.BODY_M} sx={{ color: '#f1f5f9' }}>
+                                {category.name}
+                            </Typography>
+                        </DetailValue>
                     </DetailRow>
                     <DetailRow>
                         <DetailKey>Slug</DetailKey>
-                        <DetailValue>{category.slug}</DetailValue>
+                        <DetailValue>
+                            <Typography variant={TypographyVariant.BODY_M} sx={{ color: '#f1f5f9' }}>
+                                {category.slug}
+                            </Typography>
+                        </DetailValue>
                     </DetailRow>
                     <DetailRow>
                         <DetailKey>Created At</DetailKey>
-                        <DetailValue>{dateHelpers.formatDate(category.created_at)}</DetailValue>
+                        <DetailValue>
+                            <Typography variant={TypographyVariant.BODY_M} sx={{ color: '#f1f5f9' }}>
+                                {dateHelpers.formatDate(category.created_at)}
+                            </Typography>
+                        </DetailValue>
                     </DetailRow>
                     <DetailRow>
                         <DetailKey>Updated At</DetailKey>
-                        <DetailValue>{dateHelpers.formatDate(category.updated_at)}</DetailValue>
+                        <DetailValue>
+                            <Typography variant={TypographyVariant.BODY_M} sx={{ color: '#f1f5f9' }}>
+                                {dateHelpers.formatDate(category.updated_at)}
+                            </Typography>
+                        </DetailValue>
                     </DetailRow>
                 </DetailsGrid>
             </Section>

@@ -1,51 +1,85 @@
-import styled from 'styled-components'
 import { SxProps } from '@mui/material'
+import { Typography } from '@mui/material'
 import { PropsWithChildren } from 'react'
+import { StyledDetailKey, StyledDetailRow, StyledDetailValue, StyledTable, StyledTitle } from './styled'
 
-const StyledDetailRow = styled.div`
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-`
-
-const StyledDetailKey = styled.div<{ $keyWidth?: string }>`
-  min-width: ${({ $keyWidth }) => $keyWidth || '140px'};
-  color: #9ca3af;
-  font-size: 14px;
-`
-
-const StyledDetailValue = styled.div`
-  color: #f1f5f9;
-  font-size: 14px;
-  word-break: break-word;
-`
-
-interface DetailKeyProps extends PropsWithChildren {
-    keyWidth?: string
-    sx?: SxProps
+export enum TypographyVariant {
+    BODY_M = 'body2',
+    BODY_L = 'body1',
+    CAPTION = 'caption',
+    H6 = 'h6',
 }
 
-interface DetailValueProps extends PropsWithChildren {
+interface ColumnProps extends PropsWithChildren {
+    keysWidth?: string
+}
+
+interface ValueKeyProps extends PropsWithChildren {
     sx?: SxProps
     onClick?: () => void
+}
+
+interface DetailKeyProps extends ValueKeyProps {
+    keyWidth?: string
+}
+
+export const Key = ({ children, sx }: ValueKeyProps) => {
+    if (!children) return null
+    return (
+        <Typography
+            color='#9CA3AF'
+            variant={TypographyVariant.BODY_M}
+            sx={{ whiteSpace: 'nowrap', ...sx }}
+        >
+            {children}
+        </Typography>
+    )
+}
+
+export const Value = ({ children, sx, onClick }: ValueKeyProps) => {
+    if (!children) return null
+    return (
+        <Typography
+            variant={TypographyVariant.BODY_M}
+            sx={{ whiteSpace: 'nowrap', ...sx, cursor: onClick ? 'pointer' : 'default', color: '#f1f5f9' }}
+            onClick={onClick}
+        >
+            {children}
+        </Typography>
+    )
+}
+
+export const Column = ({ children, keysWidth }: ColumnProps) => {
+    return <StyledTitle keysWidth={keysWidth}>{children}</StyledTitle>
+}
+
+export const AbstractTable = ({ children }: PropsWithChildren) => {
+    return <StyledTable>{children}</StyledTable>
 }
 
 export const DetailRow = ({ children }: PropsWithChildren) => {
     return <StyledDetailRow>{children}</StyledDetailRow>
 }
 
-export const DetailKey = ({ children, keyWidth }: DetailKeyProps) => {
-    if (!children) return null
-    return <StyledDetailKey $keyWidth={keyWidth}>{children}</StyledDetailKey>
-}
-
-export const DetailValue = ({ children, onClick }: DetailValueProps) => {
+export const DetailKey = ({ children, sx, keyWidth }: DetailKeyProps) => {
     if (!children) return null
     return (
-        <StyledDetailValue
-            onClick={onClick}
-            style={{ cursor: onClick ? 'pointer' : 'default' }}
-        >
+        <StyledDetailKey $keyWidth={keyWidth}>
+            <Typography
+                color='#9CA3AF'
+                variant={TypographyVariant.BODY_M}
+                sx={{ whiteSpace: 'nowrap', ...sx }}
+            >
+                {children}
+            </Typography>
+        </StyledDetailKey>
+    )
+}
+
+export const DetailValue = ({ children, sx, onClick }: ValueKeyProps) => {
+    if (!children) return null
+    return (
+        <StyledDetailValue sx={sx} onClick={onClick}>
             {children}
         </StyledDetailValue>
     )
