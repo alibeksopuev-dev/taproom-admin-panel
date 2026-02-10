@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useInView } from 'react-intersection-observer'
 import { menuItemsApi, MenuItem } from '@entities/menuItems'
 import { categoriesApi, Category } from '@entities/categories'
@@ -69,8 +69,9 @@ export const MobileMMenuItemsTable = () => {
         threshold: 0.1,
     })
 
-    // State for view selection
-    const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+    // State for view selection from URL
+    const [searchParams, setSearchParams] = useSearchParams()
+    const selectedCategoryId = searchParams.get('category_id')
 
     // Categories view state
     const [categoryOffset, setCategoryOffset] = useState(0)
@@ -167,7 +168,7 @@ export const MobileMMenuItemsTable = () => {
             <Root>
                 {allCategories.map((category) => (
                     <div key={category.id}>
-                        <Card onClick={() => setSelectedCategoryId(category.id)}>
+                        <Card onClick={() => setSearchParams({ category_id: category.id })}>
                             <CardHeader>
                                 <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
                                     {category.name}
@@ -205,7 +206,7 @@ export const MobileMMenuItemsTable = () => {
         <Root>
             <BackHeader>
                 <IconButton
-                    onClick={() => setSelectedCategoryId(null)}
+                    onClick={() => setSearchParams({})}
                     sx={{ color: '#f1f5f9', padding: '8px' }}
                 >
                     <ArrowBackIcon />
@@ -215,82 +216,84 @@ export const MobileMMenuItemsTable = () => {
                 </Typography>
             </BackHeader>
 
-            {menuItems.length === 0 ? (
-                <Box sx={{ p: 4, textAlign: 'center', color: '#9ca3af' }}>
-                    <Typography>No menu items in this category</Typography>
-                </Box>
-            ) : (
-                <>
-                    {Object.entries(groupedItems).map(([subcategory, items]) => (
-                        <div key={subcategory}>
-                            {subcategory !== 'main' && (
-                                <SubcategoryHeader>
-                                    <Typography
-                                        variant="subtitle1"
-                                        sx={{
-                                            fontWeight: 600,
-                                            color: '#cbd5e1',
-                                            textTransform: 'uppercase',
-                                            letterSpacing: '0.05em',
-                                            fontSize: '0.875rem',
-                                        }}
-                                    >
-                                        {subcategory}
-                                    </Typography>
-                                </SubcategoryHeader>
-                            )}
+            {
+                menuItems.length === 0 ? (
+                    <Box sx={{ p: 4, textAlign: 'center', color: '#9ca3af' }}>
+                        <Typography>No menu items in this category</Typography>
+                    </Box>
+                ) : (
+                    <>
+                        {Object.entries(groupedItems).map(([subcategory, items]) => (
+                            <div key={subcategory}>
+                                {subcategory !== 'main' && (
+                                    <SubcategoryHeader>
+                                        <Typography
+                                            variant="subtitle1"
+                                            sx={{
+                                                fontWeight: 600,
+                                                color: '#cbd5e1',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.05em',
+                                                fontSize: '0.875rem',
+                                            }}
+                                        >
+                                            {subcategory}
+                                        </Typography>
+                                    </SubcategoryHeader>
+                                )}
 
-                            {items.map((item) => (
-                                <div key={item.id}>
-                                    <Card onClick={() => navigate(`/menu-items/${item.id}`)}>
-                                        <CardHeader>
-                                            <Box>
-                                                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
-                                                    {item.name}
-                                                </Typography>
-                                            </Box>
-                                            <Chip
-                                                size="small"
-                                                label={!item.is_disabled ? 'Available' : 'Unavailable'}
-                                                sx={{
-                                                    backgroundColor: !item.is_disabled ? '#14532d' : '#7f1d1d',
-                                                    color: !item.is_disabled ? '#86efac' : '#fca5a5',
-                                                    fontWeight: 600,
-                                                }}
-                                            />
-                                        </CardHeader>
-                                        <CardBody>
-                                            {item.description && (
-                                                <Typography variant="body2" sx={{ color: '#9ca3af', mb: 1 }} noWrap>
-                                                    {item.description}
-                                                </Typography>
-                                            )}
-                                            {item.prices && item.prices.length > 0 && (
-                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
-                                                    {item.prices.map((priceOption) => (
-                                                        <Chip
-                                                            key={priceOption.id}
-                                                            size="small"
-                                                            label={`${priceOption.size} - ${formatPrice(priceOption.price)}`}
-                                                            sx={{
-                                                                backgroundColor: '#1e293b',
-                                                                color: '#774CFF',
-                                                                fontWeight: 600,
-                                                                fontSize: 12,
-                                                            }}
-                                                        />
-                                                    ))}
+                                {items.map((item) => (
+                                    <div key={item.id}>
+                                        <Card onClick={() => navigate(`/menu-items/${item.id}/edit`)}>
+                                            <CardHeader>
+                                                <Box>
+                                                    <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
+                                                        {item.name}
+                                                    </Typography>
                                                 </Box>
-                                            )}
-                                        </CardBody>
-                                    </Card>
-                                    <Divider sx={{ backgroundColor: '#334155' }} />
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </>
-            )}
-        </Root>
+                                                <Chip
+                                                    size="small"
+                                                    label={!item.is_disabled ? 'Available' : 'Unavailable'}
+                                                    sx={{
+                                                        backgroundColor: !item.is_disabled ? '#14532d' : '#7f1d1d',
+                                                        color: !item.is_disabled ? '#86efac' : '#fca5a5',
+                                                        fontWeight: 600,
+                                                    }}
+                                                />
+                                            </CardHeader>
+                                            <CardBody>
+                                                {item.description && (
+                                                    <Typography variant="body2" sx={{ color: '#9ca3af', mb: 1 }} noWrap>
+                                                        {item.description}
+                                                    </Typography>
+                                                )}
+                                                {item.prices && item.prices.length > 0 && (
+                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+                                                        {item.prices.map((priceOption) => (
+                                                            <Chip
+                                                                key={priceOption.id}
+                                                                size="small"
+                                                                label={`${priceOption.size} - ${formatPrice(priceOption.price)}`}
+                                                                sx={{
+                                                                    backgroundColor: '#1e293b',
+                                                                    color: '#774CFF',
+                                                                    fontWeight: 600,
+                                                                    fontSize: 12,
+                                                                }}
+                                                            />
+                                                        ))}
+                                                    </Box>
+                                                )}
+                                            </CardBody>
+                                        </Card>
+                                        <Divider sx={{ backgroundColor: '#334155' }} />
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </>
+                )
+            }
+        </Root >
     )
 }
