@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { IconButton, Box, Typography, Drawer } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -45,9 +45,11 @@ export const MobileMGlobalLayout = () => {
         <Root>
             <TopBar>
                 <Logo>
-                    <Typography variant="h6" sx={{ fontWeight: 700, color: '#f1f5f9' }}>
-                        Menu Admin
-                    </Typography>
+                    <Link to="/menu-items" style={{ textDecoration: 'none' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 700, color: '#f1f5f9' }}>
+                            Menu Admin
+                        </Typography>
+                    </Link>
                 </Logo>
                 <Box display="flex" alignItems="center" gap={1}>
                     <IconButton onClick={handleDrawerOpen} sx={{ color: '#f1f5f9' }}>
