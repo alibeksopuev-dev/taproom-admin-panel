@@ -50,7 +50,7 @@ const NavList = styled.div`
 const navItems = [
   { path: '/organizations', label: 'Organizations', icon: BusinessIcon },
   { path: '/categories', label: 'Categories', icon: CategoryIcon },
-  { path: '/menu-items', label: 'Menu Items', icon: RestaurantMenuIcon },
+  { path: '/menu-categories', label: 'Menu Items', icon: RestaurantMenuIcon },
 ]
 
 export const Navigation = () => {
