@@ -1,10 +1,8 @@
 import { useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { menuItemsApi, MenuItem } from '@entities/menuItems'
-import { categoriesApi } from '@entities/categories'
-import { Typography, Chip, Divider, CircularProgress, IconButton } from '@mui/material'
+import { Typography, Chip, Divider, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import styled from 'styled-components'
 import { formatPrice } from '@shared/lib'
 
@@ -45,33 +43,19 @@ const Loading = styled.div`
     padding: 16px;
 `
 
-const BackHeader = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #334155;
-`
-
 const SubcategoryHeader = styled.div`
     margin-top: 16px;
     margin-bottom: 12px;
-    padding-left: 12px;
+    padding-left: 24px;
 `
 
 export const MobileMMenuItemsTable = () => {
     const navigate = useNavigate()
 
-    // Get category from URL
+    // Get category and search from URL
     const [searchParams] = useSearchParams()
     const selectedCategoryId = searchParams.get('category_id')
-
-    // Fetch selected category details
-    const { data: categoryData } = categoriesApi.useGetCategoryByIdQuery(
-        { id: selectedCategoryId ?? '' },
-        { skip: !selectedCategoryId }
-    )
+    const searchQuery = searchParams.get('search') || ''
 
     // Fetch menu items for selected category
     const {
@@ -80,7 +64,10 @@ export const MobileMMenuItemsTable = () => {
     } = menuItemsApi.useGetMenuItemsQuery({
         limit: 1000, // Fetch all items for the category
         offset: 0,
-        filters: { category_id: selectedCategoryId ?? undefined },
+        filters: {
+            category_id: selectedCategoryId ?? undefined,
+            name: searchQuery || undefined,
+        },
     })
 
     const menuItems = useMemo(() => menuItemsData?.items ?? [], [menuItemsData?.items])
@@ -110,18 +97,6 @@ export const MobileMMenuItemsTable = () => {
     // Menu items view (grouped by subcategory)
     return (
         <Root>
-            <BackHeader>
-                <IconButton
-                    onClick={() => navigate('/menu-categories')}
-                    sx={{ color: '#f1f5f9', padding: '8px' }}
-                >
-                    <ArrowBackIcon />
-                </IconButton>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
-                    {categoryData?.name || 'All Menu Items'}
-                </Typography>
-            </BackHeader>
-
             {
                 menuItems.length === 0 ? (
                     <Box sx={{ p: 4, textAlign: 'center', color: '#9ca3af' }}>

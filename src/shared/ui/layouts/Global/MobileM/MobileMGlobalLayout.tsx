@@ -45,7 +45,7 @@ export const MobileMGlobalLayout = () => {
         <Root>
             <TopBar>
                 <Logo>
-                    <Link to="/menu-items" style={{ textDecoration: 'none' }}>
+                    <Link to="/menu-categories" style={{ textDecoration: 'none' }}>
                         <Typography variant="h6" sx={{ fontWeight: 700, color: '#f1f5f9' }}>
                             Menu Admin
                         </Typography>

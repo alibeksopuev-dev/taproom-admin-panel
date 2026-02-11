@@ -55,6 +55,7 @@ export { TableV2 } from './Table'
 export type { TableProps, Original } from './Table'
 export { SelectRowsPerPage } from './SelectRowsPerPage'
 export { TableResizer } from './TableResizer'
+export { SearchInput } from './SearchInput'
 
 // Layouts
 export { GlobalLayout } from './layouts/Global'

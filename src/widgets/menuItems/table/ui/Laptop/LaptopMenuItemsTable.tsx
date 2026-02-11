@@ -1,7 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { menuItemsApi } from '@entities/menuItems'
-import { categoriesApi } from '@entities/categories'
 import {
     MuiTable,
     MuiTableCell,
@@ -24,15 +23,24 @@ export const LaptopMenuItemsTable = () => {
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE)
 
-    // Get category from URL
+    // Get category and search from URL
     const [searchParams] = useSearchParams()
     const selectedCategoryId = searchParams.get('category_id')
+    const searchQuery = searchParams.get('search') || ''
 
     const { data, isLoading, isFetching } = menuItemsApi.useGetMenuItemsQuery({
         limit: rowsPerPage,
         offset: (page - 1) * rowsPerPage,
-        filters: { category_id: selectedCategoryId ?? undefined },
+        filters: {
+            category_id: selectedCategoryId ?? undefined,
+            name: searchQuery || undefined,
+        },
     })
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setPage(1)
+    }, [searchQuery])
 
     const menuItems = useMemo(() => data?.items ?? [], [data?.items])
     const totalCount = data?.count ?? 0
