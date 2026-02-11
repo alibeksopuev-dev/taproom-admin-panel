@@ -22,7 +22,6 @@ export const StyledFooter = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 16px 24px;
-    background-color: #1e293b;
     border-top: 1px solid #334155;
 `
 

@@ -263,8 +263,8 @@ export const Create = () => {
                                 control={control}
                                 render={({ field }) => (
                                     <FormControlLabel
-                                        control={<Switch checked={field.value} onChange={field.onChange} />}
-                                        label="Disabled"
+                                        control={<Switch checked={!field.value} onChange={(e) => field.onChange(!e.target.checked)} />}
+                                        label="Enabled"
                                         sx={{ color: '#f1f5f9' }}
                                     />
                                 )}
