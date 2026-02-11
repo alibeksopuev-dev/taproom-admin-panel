@@ -37,7 +37,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({ open, onClose, entityN
                 </Typography>
             </DialogTitle>
             <DialogContent sx={{ padding: '8px 24px' }}>
-                <Typography variant='body1'>Do you really want to delete this {entityName.toLowerCase()}?</Typography>
+                <Typography variant='body1'>Are you sure to delete this {entityName.toLowerCase()}?</Typography>
             </DialogContent>
             <DialogActions sx={{ padding: '8px 24px 16px 24px', gap: '12px' }}>
                 <Button

@@ -25,7 +25,7 @@ export const Header = () => {
                     <Breadcrumbs sx={{ color: '#9ca3af' }}>
                         <Link
                             component={RouterLink}
-                            to="/menu-items"
+                            to="/menu-categories"
                             sx={{ color: '#9ca3af', textDecoration: 'none', '&:hover': { color: '#774CFF' } }}
                         >
                             Menu Items

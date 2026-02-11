@@ -82,12 +82,20 @@ export const Edit = () => {
     })
 
     const metadata = watch('metadata')
+    const prices = watch('prices')
 
     // Add preset metadata field
     const addPresetField = (key: string, value: string = '') => {
         const existing = metadata.find(m => m.key === key)
         if (!existing) {
             setValue('metadata', [...metadata, { key, value }])
+        }
+    }
+
+    const addPricePreset = (size: string) => {
+        const existing = prices.find(p => p.size === size)
+        if (!existing) {
+            append({ size, price: 0 })
         }
     }
 
@@ -155,7 +163,7 @@ export const Edit = () => {
                 },
             }).unwrap()
 
-            navigate(`/menu-items/${id}`)
+            navigate(data.category_id ? `/menu-items?category_id=${data.category_id}` : '/menu-categories')
         } catch (error) {
             console.error('Failed to update menu item:', error)
         }
@@ -165,7 +173,7 @@ export const Edit = () => {
         if (!id) return
         try {
             await deleteMenuItem({ id }).unwrap()
-            navigate('/menu-items')
+            navigate(menuItem?.category_id ? `/menu-items?category_id=${menuItem.category_id}` : '/menu-categories')
         } catch (error) {
             console.error('Failed to delete menu item:', error)
         }
@@ -350,6 +358,13 @@ export const Edit = () => {
                             <Typography sx={{ fontSize: 18, fontWeight: 600, color: '#f1f5f9' }}>
                                 Prices
                             </Typography>
+                            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2, mt: 1 }}>
+                                <Typography sx={{ fontSize: 12, color: '#9ca3af', width: '100%', mb: 0.5 }}>Quick add:</Typography>
+                                <Chip label="+ 0.5L" size="small" onClick={() => addPricePreset('0.5L')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ 0.33L" size="small" onClick={() => addPricePreset('0.33L')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ bottle" size="small" onClick={() => addPricePreset('bottle')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ glass" size="small" onClick={() => addPricePreset('glass')} sx={{ cursor: 'pointer' }} />
+                            </Box>
 
                             <PricesContainer>
                                 {fields.map((field, index) => (
@@ -425,7 +440,7 @@ export const Edit = () => {
                         >
                             {isUpdating ? 'Saving...' : 'Save Changes'}
                         </Button>
-                        <Button variant="outlined" onClick={() => navigate(`/menu-items/${id}`)}>
+                        <Button variant="outlined" onClick={() => navigate(-1)}>
                             Cancel
                         </Button>
                     </ButtonContainer>
