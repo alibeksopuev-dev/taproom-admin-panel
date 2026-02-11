@@ -48,6 +48,10 @@ export const router = createBrowserRouter([
                 ),
                 children: [
                     {
+                        path: 'menu-categories',
+                        element: <MenuCategories />,
+                    },
+                    {
                         path: 'categories',
                         element: <Categories />,
                     },
@@ -62,10 +66,6 @@ export const router = createBrowserRouter([
                     {
                         path: 'categories/:id/edit',
                         element: <CategoryEdit />,
-                    },
-                    {
-                        path: 'menu-categories',
-                        element: <MenuCategories />,
                     },
                     {
                         path: 'menu-items',
