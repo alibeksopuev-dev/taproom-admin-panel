@@ -1,8 +1,7 @@
-import { useMemo, useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useInView } from 'react-intersection-observer'
 import { menuItemsApi, MenuItem } from '@entities/menuItems'
-import { categoriesApi, Category } from '@entities/categories'
+import { categoriesApi } from '@entities/categories'
 import { Typography, Chip, Divider, CircularProgress, IconButton } from '@mui/material'
 import Box from '@mui/material/Box'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -61,70 +60,30 @@ const SubcategoryHeader = styled.div`
     padding-left: 12px;
 `
 
-const LIMIT = 10
-
 export const MobileMMenuItemsTable = () => {
     const navigate = useNavigate()
-    const { ref, inView } = useInView({
-        threshold: 0.1,
-    })
 
-    // State for view selection from URL
-    const [searchParams, setSearchParams] = useSearchParams()
+    // Get category from URL
+    const [searchParams] = useSearchParams()
     const selectedCategoryId = searchParams.get('category_id')
 
-    // Categories view state
-    const [categoryOffset, setCategoryOffset] = useState(0)
-    const [allCategories, setAllCategories] = useState<Category[]>([])
-    const [hasMoreCategories, setHasMoreCategories] = useState(true)
-
-    // Fetch categories
-    const {
-        data: categoriesData,
-        isLoading: categoriesLoading,
-        isFetching: categoriesFetching,
-    } = categoriesApi.useGetCategoriesQuery(
-        {
-            limit: LIMIT,
-            offset: categoryOffset,
-        },
-        { skip: selectedCategoryId !== null }
+    // Fetch selected category details
+    const { data: categoryData } = categoriesApi.useGetCategoryByIdQuery(
+        { id: selectedCategoryId ?? '' },
+        { skip: !selectedCategoryId }
     )
 
     // Fetch menu items for selected category
     const {
         data: menuItemsData,
         isLoading: menuItemsLoading,
-    } = menuItemsApi.useGetMenuItemsQuery(
-        {
-            limit: 1000, // Fetch all items for the category
-            offset: 0,
-            filters: { category_id: selectedCategoryId ?? undefined },
-        },
-        { skip: selectedCategoryId === null }
-    )
+    } = menuItemsApi.useGetMenuItemsQuery({
+        limit: 1000, // Fetch all items for the category
+        offset: 0,
+        filters: { category_id: selectedCategoryId ?? undefined },
+    })
 
-    const categories = useMemo(() => categoriesData?.items ?? [], [categoriesData?.items])
-    const categoriesCount = categoriesData?.count ?? 0
     const menuItems = useMemo(() => menuItemsData?.items ?? [], [menuItemsData?.items])
-
-    // Handle categories infinite scroll
-    useEffect(() => {
-        if (categories.length > 0) {
-            setAllCategories((prev) => {
-                const existingIds = new Set(prev.map((c) => c.id))
-                const newCategories = categories.filter((c) => !existingIds.has(c.id))
-                return [...prev, ...newCategories]
-            })
-            setHasMoreCategories(allCategories.length + categories.length < categoriesCount)
-        }
-    }, [categories, categoriesCount, allCategories.length])
-
-    useEffect(() => {
-        if (inView && hasMoreCategories && !categoriesFetching && selectedCategoryId === null) {
-            setCategoryOffset((prev) => prev + LIMIT)
-        }
-    }, [inView, hasMoreCategories, categoriesFetching, selectedCategoryId])
 
     // Group menu items by subcategory
     const groupedItems = useMemo(() => {
@@ -139,65 +98,12 @@ export const MobileMMenuItemsTable = () => {
         return groups
     }, [menuItems])
 
-    // Get selected category name
-    const selectedCategory = useMemo(
-        () => allCategories.find((c) => c.id === selectedCategoryId),
-        [allCategories, selectedCategoryId]
-    )
-
     // Loading state
-    if ((categoriesLoading && allCategories.length === 0) || menuItemsLoading) {
+    if (menuItemsLoading) {
         return (
             <Loading>
                 <CircularProgress size={24} />
             </Loading>
-        )
-    }
-
-    // Categories view
-    if (selectedCategoryId === null) {
-        if (allCategories.length === 0) {
-            return (
-                <Box sx={{ p: 4, textAlign: 'center', color: '#9ca3af' }}>
-                    <Typography>No categories found</Typography>
-                </Box>
-            )
-        }
-
-        return (
-            <Root>
-                {allCategories.map((category) => (
-                    <div key={category.id}>
-                        <Card onClick={() => setSearchParams({ category_id: category.id })}>
-                            <CardHeader>
-                                <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
-                                    {category.name}
-                                </Typography>
-                                <Chip
-                                    size="small"
-                                    label={category.slug}
-                                    sx={{
-                                        backgroundColor: 'rgba(119, 76, 255, 0.12)',
-                                        color: '#774CFF',
-                                        fontWeight: 600,
-                                    }}
-                                />
-                            </CardHeader>
-                        </Card>
-                        <Divider sx={{ backgroundColor: '#334155' }} />
-                    </div>
-                ))}
-
-                {hasMoreCategories && (
-                    <div ref={ref} style={{ height: 1 }}>
-                        {categoriesFetching && (
-                            <Loading>
-                                <CircularProgress size={20} />
-                            </Loading>
-                        )}
-                    </div>
-                )}
-            </Root>
         )
     }
 
@@ -206,13 +112,13 @@ export const MobileMMenuItemsTable = () => {
         <Root>
             <BackHeader>
                 <IconButton
-                    onClick={() => setSearchParams({})}
+                    onClick={() => navigate('/menu-categories')}
                     sx={{ color: '#f1f5f9', padding: '8px' }}
                 >
                     <ArrowBackIcon />
                 </IconButton>
                 <Typography variant="h6" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
-                    {selectedCategory?.name || 'Menu Items'}
+                    {categoryData?.name || 'All Menu Items'}
                 </Typography>
             </BackHeader>
 

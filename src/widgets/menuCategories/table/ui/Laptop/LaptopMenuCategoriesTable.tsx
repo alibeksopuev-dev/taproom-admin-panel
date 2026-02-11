@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { menuItemsApi } from '@entities/menuItems'
+import { useNavigate } from 'react-router-dom'
 import { categoriesApi } from '@entities/categories'
 import {
     MuiTable,
@@ -13,32 +12,47 @@ import {
     Box,
     Typography,
 } from '@shared/ui'
-import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
-import { columns } from '../../model/columns'
+import { getCoreRowModel, getPaginationRowModel, useReactTable, createColumnHelper } from '@tanstack/react-table'
 import { StyledBodyRow, StyledFooter, StyledHeaderRow, StyledTableContainer, Loading } from './styled'
+import type { Category } from '@entities/categories'
 
 const DEFAULT_ROWS_PER_PAGE = 10
 
-export const LaptopMenuItemsTable = () => {
+const columnHelper = createColumnHelper<Category>()
+
+const columns = [
+    columnHelper.accessor('name', {
+        header: 'Name',
+        cell: (info) => info.getValue(),
+        size: 300,
+    }),
+    columnHelper.accessor('slug', {
+        header: 'Slug',
+        cell: (info) => info.getValue(),
+        size: 200,
+    }),
+    columnHelper.accessor('created_at', {
+        header: 'Created At',
+        cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+        size: 150,
+    }),
+]
+
+export const LaptopMenuCategoriesTable = () => {
     const navigate = useNavigate()
     const [page, setPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE)
 
-    // Get category from URL
-    const [searchParams] = useSearchParams()
-    const selectedCategoryId = searchParams.get('category_id')
-
-    const { data, isLoading, isFetching } = menuItemsApi.useGetMenuItemsQuery({
+    const { data, isLoading, isFetching } = categoriesApi.useGetCategoriesQuery({
         limit: rowsPerPage,
         offset: (page - 1) * rowsPerPage,
-        filters: { category_id: selectedCategoryId ?? undefined },
     })
 
-    const menuItems = useMemo(() => data?.items ?? [], [data?.items])
+    const categories = useMemo(() => data?.items ?? [], [data?.items])
     const totalCount = data?.count ?? 0
 
     const table = useReactTable({
-        data: menuItems,
+        data: categories,
         columns,
         rowCount: totalCount,
         manualPagination: true,
@@ -58,11 +72,11 @@ export const LaptopMenuItemsTable = () => {
         return <TableSkeleton columnsCount={columns.length} />
     }
 
-    if (!menuItems.length) {
+    if (!categories.length) {
         return (
             <Loading>
                 <Box sx={{ p: 4, textAlign: 'center', color: '#9ca3af' }}>
-                    <Typography>No menu items found</Typography>
+                    <Typography>No categories found</Typography>
                 </Box>
             </Loading>
         )
@@ -90,7 +104,7 @@ export const LaptopMenuItemsTable = () => {
                     </MuiTableCell>
                 ),
                 BodyRow: ({ children, original }) => (
-                    <StyledBodyRow onClick={() => navigate(`/menu-items/${(original as { id: string })?.id}`)}>
+                    <StyledBodyRow onClick={() => navigate(`/menu-items?category_id=${(original as Category)?.id}`)}>
                         {children}
                     </StyledBodyRow>
                 ),

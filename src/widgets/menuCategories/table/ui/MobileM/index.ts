@@ -1,0 +1,1 @@
+export { MobileMMenuCategoriesTable } from './MobileMMenuCategoriesTable'

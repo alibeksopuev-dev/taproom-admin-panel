@@ -1,0 +1,1 @@
+export { LaptopMenuCategoriesTable } from './LaptopMenuCategoriesTable'

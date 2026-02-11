@@ -15,6 +15,7 @@ import { Organizations } from '@pages/organizations'
 import { OrganizationDetails } from '@pages/organizationDetails'
 import { OrganizationCreate } from '@pages/organizationCreate'
 import { OrganizationEdit } from '@pages/organizationEdit'
+import { MenuCategories } from '@pages/menuCategories'
 
 export const router = createBrowserRouter([
     {
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'categories/:id/edit',
                         element: <CategoryEdit />,
+                    },
+                    {
+                        path: 'menu-categories',
+                        element: <MenuCategories />,
                     },
                     {
                         path: 'menu-items',
