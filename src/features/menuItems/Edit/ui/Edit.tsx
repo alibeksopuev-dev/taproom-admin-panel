@@ -362,8 +362,8 @@ export const Edit = () => {
                                 <Typography sx={{ fontSize: 12, color: '#9ca3af', width: '100%', mb: 0.5 }}>Quick add:</Typography>
                                 <Chip label="+ 0.5L" size="small" onClick={() => addPricePreset('0.5L')} sx={{ cursor: 'pointer' }} />
                                 <Chip label="+ 0.33L" size="small" onClick={() => addPricePreset('0.33L')} sx={{ cursor: 'pointer' }} />
-                                <Chip label="+ bottle" size="small" onClick={() => addPricePreset('bottle')} sx={{ cursor: 'pointer' }} />
-                                <Chip label="+ glass" size="small" onClick={() => addPricePreset('glass')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ Bottle" size="small" onClick={() => addPricePreset('Bottle')} sx={{ cursor: 'pointer' }} />
+                                <Chip label="+ Glass" size="small" onClick={() => addPricePreset('Glass')} sx={{ cursor: 'pointer' }} />
                             </Box>
 
                             <PricesContainer>
