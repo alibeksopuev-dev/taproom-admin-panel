@@ -18,7 +18,6 @@ import {
     LogoContainer,
     LogoImage,
     LogoPlaceholder,
-    ColorPreview,
 } from './styled'
 
 export const Details = () => {

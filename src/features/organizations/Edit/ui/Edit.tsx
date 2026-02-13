@@ -56,7 +56,6 @@ export const Edit = () => {
         control,
         handleSubmit,
         reset,
-        watch,
         formState: { isValid, isDirty },
     } = useForm<FormValues>({
         defaultValues: {

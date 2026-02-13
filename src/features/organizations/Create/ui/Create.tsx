@@ -14,7 +14,7 @@ import {
     FileUploadInput,
     CircularProgress,
 } from '@shared/ui'
-import { Root, FormContainer, ButtonContainer, Section, ColorPickerRow, ColorPreview } from './styled'
+import { Root, FormContainer, ButtonContainer, Section } from './styled'
 
 interface FormValues {
     name: string
@@ -45,7 +45,6 @@ export const Create = () => {
     const {
         control,
         handleSubmit,
-        watch,
         setValue,
         formState: { isValid },
     } = useForm<FormValues>({
@@ -63,7 +62,7 @@ export const Create = () => {
         mode: 'onChange',
     })
 
-    const primaryColor = watch('primary_color')
+
 
     const handleFileUpload = async (file: File, onSuccess: (url: string) => void) => {
         setIsUploading(true)
