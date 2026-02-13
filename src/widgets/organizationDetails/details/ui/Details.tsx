@@ -102,17 +102,8 @@ export const Details = () => {
             </Section>
 
             <Section>
-                <SectionTitle>Branding</SectionTitle>
+                <SectionTitle>Logo</SectionTitle>
                 <DetailsGrid>
-                    <DetailRow>
-                        <DetailKey>Primary Color</DetailKey>
-                        <DetailValue>
-                            <Box display="flex" alignItems="center" gap={1}>
-                                <ColorPreview color={organization.primary_color} />
-                                <Typography sx={{ color: '#9ca3af' }}>{organization.primary_color}</Typography>
-                            </Box>
-                        </DetailValue>
-                    </DetailRow>
                     <DetailRow>
                         <DetailKey>Logo URL</DetailKey>
                         <DetailValue>{organization.logo_url ?? '-'}</DetailValue>

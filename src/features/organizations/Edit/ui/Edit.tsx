@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { organizationsApi } from '@entities/organizations'
+import { uploadMedia } from '@entities/media'
 import {
     Box,
     Button,
@@ -10,9 +11,11 @@ import {
     Header,
     FormControlLabel,
     Switch,
+
     CircularProgress,
+    FileUploadInput,
 } from '@shared/ui'
-import { Root, FormContainer, ButtonContainer, Section, ColorPickerRow, ColorPreview } from './styled'
+import { Root, FormContainer, ButtonContainer, Section } from './styled'
 
 interface FormValues {
     name: string
@@ -21,12 +24,25 @@ interface FormValues {
     phone_number: string
     address: string
     logo_url: string
-    primary_color: string
     is_disabled: boolean
 }
 
 export const Edit = () => {
     const { id } = useParams<{ id: string }>()
+
+    const handleFileUpload = async (file: File, onSuccess: (url: string) => void) => {
+        setIsUploading(true)
+        try {
+            const result = await uploadMedia({ file })
+            onSuccess(result.publicUrl)
+        } catch (error) {
+            console.error('Upload failed:', error)
+            alert('Failed to upload image. Please try again.')
+        } finally {
+            setIsUploading(false)
+        }
+    }
+
     const navigate = useNavigate()
 
     const { data: organization, isLoading: isFetching } = organizationsApi.useGetOrganizationByIdQuery(
@@ -34,6 +50,7 @@ export const Edit = () => {
         { skip: !id }
     )
     const [updateOrganization, { isLoading: isUpdating }] = organizationsApi.useUpdateOrganizationMutation()
+    const [isUploading, setIsUploading] = React.useState(false)
 
     const {
         control,
@@ -49,13 +66,10 @@ export const Edit = () => {
             phone_number: '',
             address: '',
             logo_url: '',
-            primary_color: '#3b82f6',
             is_disabled: false,
         },
         mode: 'onChange',
     })
-
-    const primaryColor = watch('primary_color')
 
     useEffect(() => {
         if (organization) {
@@ -66,7 +80,6 @@ export const Edit = () => {
                 phone_number: organization.phone_number ?? '',
                 address: organization.address ?? '',
                 logo_url: organization.logo_url ?? '',
-                primary_color: organization.primary_color,
                 is_disabled: organization.is_disabled,
             })
         }
@@ -85,7 +98,6 @@ export const Edit = () => {
                     phone_number: data.phone_number || null,
                     address: data.address || null,
                     logo_url: data.logo_url || null,
-                    primary_color: data.primary_color,
                     is_disabled: data.is_disabled,
                 },
             }).unwrap()
@@ -226,37 +238,59 @@ export const Edit = () => {
 
                         <Section>
                             <Typography sx={{ fontSize: 18, fontWeight: 600, color: '#f1f5f9' }}>
-                                Branding
+                                Logo
                             </Typography>
 
                             <Controller
                                 name="logo_url"
                                 control={control}
                                 render={({ field }) => (
-                                    <TextField
-                                        {...field}
-                                        label="Logo URL"
-                                        fullWidth
-                                        sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
-                                    />
-                                )}
-                            />
-
-                            <ColorPickerRow>
-                                <Controller
-                                    name="primary_color"
-                                    control={control}
-                                    render={({ field }) => (
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                        <Typography sx={{ fontSize: 14, fontWeight: 500, color: '#f1f5f9' }}>
+                                            Organization Logo
+                                        </Typography>
+                                        {isUploading ? (
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 3, bgcolor: '#1e293b', borderRadius: 1 }}>
+                                                <CircularProgress size={20} />
+                                                <Typography sx={{ color: '#94a3b8', fontSize: 14 }}>
+                                                    Uploading image...
+                                                </Typography>
+                                            </Box>
+                                        ) : (
+                                            <FileUploadInput
+                                                onChange={(file) => handleFileUpload(file, field.onChange)}
+                                            />
+                                        )}
+                                        {field.value && !isUploading && (
+                                            <Box
+                                                component="img"
+                                                src={field.value}
+                                                alt="Logo preview"
+                                                onClick={() => field.value && window.open(field.value, '_blank')}
+                                                sx={{
+                                                    width: 128,
+                                                    height: 128,
+                                                    objectFit: 'cover',
+                                                    border: '2px solid #475569',
+                                                    borderRadius: 1,
+                                                    cursor: 'pointer',
+                                                    '&:hover': {
+                                                        opacity: 0.8,
+                                                    },
+                                                }}
+                                            />
+                                        )}
                                         <TextField
                                             {...field}
-                                            label="Primary Color"
-                                            placeholder="#3b82f6"
-                                            sx={{ flex: 1, '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
+                                            value={field.value || ''}
+                                            label="Logo URL"
+                                            placeholder="Or enter logo URL manually"
+                                            fullWidth
+                                            sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#1e293b' } }}
                                         />
-                                    )}
-                                />
-                                <ColorPreview color={primaryColor} />
-                            </ColorPickerRow>
+                                    </Box>
+                                )}
+                            />
                         </Section>
                     </FormContainer>
 

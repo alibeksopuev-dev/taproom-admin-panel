@@ -7,7 +7,7 @@ export const UnAuthorizedLoader = ({ children }: PropsWithChildren) => {
     const isAuth = useAppSelector(selectIsAuthenticated)
 
     if (isAuth) {
-        return <Navigate to="/categories" replace />
+        return <Navigate to="/menu-categories" replace />
     }
 
     return children
