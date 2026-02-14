@@ -154,7 +154,7 @@ export const MobileMMenuItemsTable = () => {
                                                             <Chip
                                                                 key={priceOption.id}
                                                                 size="small"
-                                                                label={`${priceOption.size} - ${formatPrice(priceOption.price)}`}
+                                                                label={priceOption.size ? `${priceOption.size} - ${formatPrice(priceOption.price)}` : formatPrice(priceOption.price)}
                                                                 sx={{
                                                                     backgroundColor: '#1e293b',
                                                                     color: '#774CFF',

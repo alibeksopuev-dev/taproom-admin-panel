@@ -67,6 +67,27 @@ export const MobileMMenuCategoriesTable = () => {
 
     return (
         <Root>
+            {/* All Items Card */}
+            <div>
+                <Card onClick={() => navigate('/menu-items')}>
+                    <CardHeader>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600, color: '#f1f5f9' }}>
+                            all items
+                        </Typography>
+                        <Chip
+                            size="small"
+                            label="all"
+                            sx={{
+                                backgroundColor: 'rgba(119, 76, 255, 0.12)',
+                                color: '#774CFF',
+                                fontWeight: 600,
+                            }}
+                        />
+                    </CardHeader>
+                </Card>
+                <Divider sx={{ backgroundColor: '#334155' }} />
+            </div>
+
             {allCategories.map((category) => (
                 <div key={category.id}>
                     <Card onClick={() => navigate(`/menu-items?category_id=${category.id}`)}>

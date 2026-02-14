@@ -36,7 +36,7 @@ export const Header = ({ searchQuery = '', onSearchChange, categoryName }: Heade
     return (
         <HeaderRoot>
             <TitleRow>
-                <Title>{categoryName}</Title>
+                <Title>{categoryName || 'All menu items'}</Title>
                 <Button
                     variant="contained"
                     startIcon={<Plus color="#fff" />}
