@@ -13,12 +13,24 @@ export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
 `
 
 export const ButtonContainer = styled.div`
   display: flex;
   gap: 16px;
-  padding: 24px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background-color: #1e293b;
   border-top: 1px solid #334155;
-  background-color: #0f172a;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+
+  & > button {
+    flex: 1;
+  }
 `
