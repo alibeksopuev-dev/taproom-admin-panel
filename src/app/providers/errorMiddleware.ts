@@ -1,6 +1,6 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit'
 import type { Middleware } from '@reduxjs/toolkit'
-import { setError } from '../../entities/app/model/slice'
+import { setError } from '@entities/app/model/slice'
 
 export const errorMiddleware: Middleware = (api) => (next) => (action) => {
     if (isRejectedWithValue(action)) {
