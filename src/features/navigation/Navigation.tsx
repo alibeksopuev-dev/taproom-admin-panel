@@ -49,10 +49,10 @@ const NavList = styled.div`
 `
 
 const navItems = [
-  { path: '/orders', label: 'Orders', icon: ShoppingBagIcon },
   { path: '/organizations', label: 'Organizations', icon: BusinessIcon },
   { path: '/categories', label: 'Categories', icon: CategoryIcon },
   { path: '/menu-categories', label: 'Menu Items', icon: RestaurantMenuIcon },
+  { path: '/orders', label: 'Orders', icon: ShoppingBagIcon },
 ]
 
 export const Navigation = () => {

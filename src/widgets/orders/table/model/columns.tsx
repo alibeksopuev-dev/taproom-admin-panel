@@ -31,15 +31,23 @@ const NEXT_STATUS: Partial<Record<OrderStatus, { status: OrderStatus; label: str
 }
 
 export const createColumns = (onStatusChange: (order: Order, status: OrderStatus) => void) => [
-    columnHelper.accessor(({ order_number }) => order_number, {
-        id: 'order_number',
-        header: 'Order #',
-        cell: ({ getValue }) => (
-            <Typography sx={{ fontFamily: 'monospace', fontWeight: 600, color: '#f1f5f9' }}>
-                {getValue()}
-            </Typography>
-        ),
-        size: 140,
+    columnHelper.accessor(({ items }) => items, {
+        id: 'items',
+        header: 'Items',
+        cell: ({ getValue }) => {
+            const items = getValue()
+            if (!items || items.length === 0) return <Typography sx={{ color: '#6b7280', fontSize: 12 }}>—</Typography>
+            return (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
+                    {items.map((item) => (
+                        <Typography key={item.id} sx={{ color: '#e2e8f0', fontSize: 12 }}>
+                            {item.item_name}{item.size ? ` (${item.size})` : ''} × {item.quantity}
+                        </Typography>
+                    ))}
+                </Box>
+            )
+        },
+        size: 200,
     }),
     columnHelper.accessor(({ status }) => status, {
         id: 'status',
@@ -109,11 +117,21 @@ export const createColumns = (onStatusChange: (order: Order, status: OrderStatus
         cell: ({ row }) => {
             const order = row.original
             const next = NEXT_STATUS[order.status]
+            const hasActions = next || (order.status !== 'completed' && order.status !== 'cancelled')
+
+            if (!hasActions) {
+                return (
+                    <Typography sx={{ color: '#6b7280', fontSize: 13, px: 1 }}>
+                        N/A
+                    </Typography>
+                )
+            }
+
             return (
                 <Box display="flex" gap={0.5}>
                     {next && (
                         <Button
-                            size="small"
+                            size="medium"
                             onClick={(e) => { e.stopPropagation(); onStatusChange(order, next.status) }}
                             sx={{
                                 bgcolor: next.bg,
@@ -132,7 +150,7 @@ export const createColumns = (onStatusChange: (order: Order, status: OrderStatus
                     )}
                     {order.status !== 'completed' && order.status !== 'cancelled' && (
                         <Button
-                            size="small"
+                            size="medium"
                             onClick={(e) => { e.stopPropagation(); onStatusChange(order, 'cancelled') }}
                             sx={{
                                 bgcolor: '#7f1d1d40',

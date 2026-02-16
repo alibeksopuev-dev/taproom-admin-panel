@@ -77,7 +77,7 @@ export const MobileMOrdersTable = () => {
             ...(paymentFilter ? { payment_status: paymentFilter as PaymentStatus } : {}),
         },
     }, {
-        pollingInterval: 10000,
+        pollingInterval: 15000,
     })
 
     const orders = useMemo(() => data?.items ?? [], [data?.items])
@@ -127,6 +127,15 @@ export const MobileMOrdersTable = () => {
                                     sx={{ bgcolor: statusColors.bg, color: statusColors.color, fontWeight: 600 }}
                                 />
                             </CardHeader>
+                            {order.items && order.items.length > 0 && (
+                                <Box sx={{ mb: 1, pl: 0.5 }}>
+                                    {order.items.map((item) => (
+                                        <Typography key={item.id} sx={{ color: '#cbd5e1', fontSize: 13 }}>
+                                            {item.item_name}{item.size ? ` (${item.size})` : ''} × {item.quantity}
+                                        </Typography>
+                                    ))}
+                                </Box>
+                            )}
                             <CardBody>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>

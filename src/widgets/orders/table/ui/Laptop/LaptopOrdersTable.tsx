@@ -38,7 +38,7 @@ export const LaptopOrdersTable = () => {
 
     const columns = useMemo(() => createColumns(handleStatusChange), [])
 
-    const { data, isLoading, isFetching } = ordersApi.useGetOrdersQuery({
+    const { data, isLoading } = ordersApi.useGetOrdersQuery({
         limit: rowsPerPage,
         offset: (page - 1) * rowsPerPage,
         filters: {
@@ -46,7 +46,7 @@ export const LaptopOrdersTable = () => {
             ...(paymentFilter ? { payment_status: paymentFilter as PaymentStatus } : {}),
         },
     }, {
-        pollingInterval: 10000,
+        pollingInterval: 15000,
     })
 
     useEffect(() => {
@@ -73,7 +73,7 @@ export const LaptopOrdersTable = () => {
 
     const rowsCount = `${Math.min((page - 1) * rowsPerPage + 1, totalCount)}-${Math.min(page * rowsPerPage, totalCount)} of ${totalCount}`
 
-    if (isLoading || isFetching) {
+    if (isLoading) {
         return <TableSkeleton columnsCount={columns.length} />
     }
 
