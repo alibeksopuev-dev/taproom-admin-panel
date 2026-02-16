@@ -56,6 +56,9 @@ export type { TableProps, Original } from './Table'
 export { SelectRowsPerPage } from './SelectRowsPerPage'
 export { TableResizer } from './TableResizer'
 export { SearchInput } from './SearchInput'
+export { Autocomplete } from './Autocomplete'
+export { Drawer as FilterDrawer } from './Drawer'
+export { DrawerContent } from './Drawer'
 
 // Layouts
 export { GlobalLayout } from './layouts/Global'

@@ -1,9 +1,12 @@
 import styled from 'styled-components'
 
 export const StyledTableContainer = styled.div`
-    flex: 1;
-    overflow: auto;
     background-color: #0f172a;
+  border-radius: 12px 12px 0 0;
+  padding: 0;
+  height: 100%;
+  flex: 1;
+  overflow: auto;
 `
 
 export const StyledHeaderRow = styled.tr``

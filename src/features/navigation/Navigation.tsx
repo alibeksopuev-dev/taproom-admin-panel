@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import BusinessIcon from '@mui/icons-material/Business'
 import CategoryIcon from '@mui/icons-material/Category'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 
 const NavItem = styled(NavLink) <{ $active?: boolean }>`
   display: flex;
@@ -48,6 +49,7 @@ const NavList = styled.div`
 `
 
 const navItems = [
+  { path: '/orders', label: 'Orders', icon: ShoppingBagIcon },
   { path: '/organizations', label: 'Organizations', icon: BusinessIcon },
   { path: '/categories', label: 'Categories', icon: CategoryIcon },
   { path: '/menu-categories', label: 'Menu Items', icon: RestaurantMenuIcon },
