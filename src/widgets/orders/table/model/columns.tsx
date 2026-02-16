@@ -106,7 +106,7 @@ export const createColumns = (onStatusChange: (order: Order, status: OrderStatus
         header: 'Time',
         cell: ({ getValue }) => (
             <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
-                {formatDistanceToNow(new Date(getValue()), { addSuffix: true })}
+                {formatDistanceToNow(new Date(getValue() + 'Z'), { addSuffix: true })}
             </Typography>
         ),
         size: 120,

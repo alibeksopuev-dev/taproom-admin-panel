@@ -114,11 +114,17 @@ export const MobileMOrdersTable = () => {
                         <Card key={order.id}>
                             <CardHeader>
                                 <Box>
-                                    <Typography variant="subtitle1" sx={{ fontFamily: 'monospace', fontWeight: 600, color: '#f1f5f9' }}>
-                                        {order.order_number}
-                                    </Typography>
+                                    {order.items && order.items.length > 0 && (
+                                        <Box sx={{ mb: 1 }}>
+                                            {order.items.map((item) => (
+                                                <Typography variant="subtitle1" key={item.id} sx={{ color: '#cbd5e1', fontSize: 13 }}>
+                                                    {item.item_name}{item.size ? ` (${item.size})` : ''} × {item.quantity}
+                                                </Typography>
+                                            ))}
+                                        </Box>
+                                    )}
                                     <Typography variant="body2" sx={{ color: '#9ca3af', fontSize: 12 }}>
-                                        {formatDistanceToNow(new Date(order.created_at), { addSuffix: true })}
+                                        {formatDistanceToNow(new Date(order.created_at + 'Z'), { addSuffix: true })}
                                     </Typography>
                                 </Box>
                                 <Chip
@@ -127,15 +133,6 @@ export const MobileMOrdersTable = () => {
                                     sx={{ bgcolor: statusColors.bg, color: statusColors.color, fontWeight: 600 }}
                                 />
                             </CardHeader>
-                            {order.items && order.items.length > 0 && (
-                                <Box sx={{ mb: 1, pl: 0.5 }}>
-                                    {order.items.map((item) => (
-                                        <Typography key={item.id} sx={{ color: '#cbd5e1', fontSize: 13 }}>
-                                            {item.item_name}{item.size ? ` (${item.size})` : ''} × {item.quantity}
-                                        </Typography>
-                                    ))}
-                                </Box>
-                            )}
                             <CardBody>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
