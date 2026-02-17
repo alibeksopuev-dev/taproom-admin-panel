@@ -1,7 +1,7 @@
 import { Order, OrderStatus } from '@entities/orders'
 import { Typography, Chip, Box } from '@shared/ui'
 import { createColumnHelper } from '@tanstack/react-table'
-import { formatDistanceToNow } from 'date-fns'
+import { format } from 'date-fns'
 import Button from '@mui/material/Button'
 
 const columnHelper = createColumnHelper<Order>()
@@ -31,6 +31,16 @@ const NEXT_STATUS: Partial<Record<OrderStatus, { status: OrderStatus; label: str
 }
 
 export const createColumns = (onStatusChange: (order: Order, status: OrderStatus) => void) => [
+    columnHelper.accessor(({ order_number }) => order_number, {
+        id: 'order_number',
+        header: 'Order ID',
+        cell: ({ getValue }) => (
+            <Typography variant='body2'>
+                {getValue()}
+            </Typography>
+        ),
+        size: 100,
+    }),
     columnHelper.accessor(({ items }) => items, {
         id: 'items',
         header: 'Items',
@@ -48,6 +58,36 @@ export const createColumns = (onStatusChange: (order: Order, status: OrderStatus
             )
         },
         size: 200,
+    }),
+    columnHelper.accessor(({ total_amount }) => total_amount, {
+        id: 'total_amount',
+        header: 'Amount',
+        cell: ({ getValue }) => (
+            <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
+                {getValue().toLocaleString('en-US')} VND
+            </Typography>
+        ),
+        size: 130,
+    }),
+    columnHelper.accessor(({ payment_method }) => payment_method, {
+        id: 'payment_method',
+        header: 'Method',
+        cell: ({ getValue }) => (
+            <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
+                {getValue() || '—'}
+            </Typography>
+        ),
+        size: 100,
+    }),
+    columnHelper.accessor(({ created_at }) => created_at, {
+        id: 'created_at',
+        header: 'Time',
+        cell: ({ getValue }) => (
+            <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
+                {format(new Date(getValue() + 'Z'), 'HH:mm')}
+            </Typography>
+        ),
+        size: 120,
     }),
     columnHelper.accessor(({ status }) => status, {
         id: 'status',
@@ -80,36 +120,6 @@ export const createColumns = (onStatusChange: (order: Order, status: OrderStatus
             )
         },
         size: 100,
-    }),
-    columnHelper.accessor(({ total_amount }) => total_amount, {
-        id: 'total_amount',
-        header: 'Amount',
-        cell: ({ getValue }) => (
-            <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
-                {getValue().toLocaleString('en-US')} VND
-            </Typography>
-        ),
-        size: 130,
-    }),
-    columnHelper.accessor(({ payment_method }) => payment_method, {
-        id: 'payment_method',
-        header: 'Method',
-        cell: ({ getValue }) => (
-            <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
-                {getValue() || '—'}
-            </Typography>
-        ),
-        size: 100,
-    }),
-    columnHelper.accessor(({ created_at }) => created_at, {
-        id: 'created_at',
-        header: 'Time',
-        cell: ({ getValue }) => (
-            <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
-                {formatDistanceToNow(new Date(getValue() + 'Z'), { addSuffix: true })}
-            </Typography>
-        ),
-        size: 120,
     }),
     columnHelper.display({
         id: 'actions',

@@ -5,7 +5,7 @@ import { Typography, Chip, CircularProgress } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import styled from 'styled-components'
-import { formatDistanceToNow } from 'date-fns'
+import { format } from 'date-fns'
 
 const Root = styled.div`
     display: flex;
@@ -114,17 +114,20 @@ export const MobileMOrdersTable = () => {
                         <Card key={order.id}>
                             <CardHeader>
                                 <Box>
+                                    <Typography sx={{ color: '#9ca3af', fontSize: 13 }} mb={0.5}>
+                                        {order.order_number}
+                                    </Typography>
                                     {order.items && order.items.length > 0 && (
-                                        <Box sx={{ mb: 1 }}>
+                                        <Box>
                                             {order.items.map((item) => (
-                                                <Typography variant="subtitle1" key={item.id} sx={{ color: '#cbd5e1', fontSize: 13 }}>
+                                                <Typography key={item.id} sx={{ fontSize: 13 }}>
                                                     {item.item_name}{item.size ? ` (${item.size})` : ''} × {item.quantity}
                                                 </Typography>
                                             ))}
                                         </Box>
                                     )}
-                                    <Typography variant="body2" sx={{ color: '#9ca3af', fontSize: 12 }}>
-                                        {formatDistanceToNow(new Date(order.created_at + 'Z'), { addSuffix: true })}
+                                    <Typography sx={{ color: '#9ca3af', fontSize: 11 }}>
+                                        {format(new Date(order.created_at + 'Z'), 'HH:mm')}
                                     </Typography>
                                 </Box>
                                 <Chip
