@@ -1,13 +1,7 @@
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@shared/api/supabase'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase environment variables')
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// 1 MB max file size
+const MAX_FILE_SIZE = 1 * 1024 * 1024
 
 export interface UploadMediaParams {
     file: File
@@ -20,16 +14,29 @@ export interface UploadMediaResponse {
 }
 
 /**
- * Upload a file to Supabase Storage
+ * Upload a file to Supabase Storage.
+ * Files are stored under `{userId}/{filename}` to match RLS folder policies.
+ * Max file size: 1 MB.
  */
 export async function uploadMedia({
     file,
     bucket = 'menu-images',
 }: UploadMediaParams): Promise<UploadMediaResponse> {
-    // Generate unique filename
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+        throw new Error(`File too large. Maximum size is 1 MB (got ${(file.size / 1024 / 1024).toFixed(1)} MB)`)
+    }
+
+    // Get current user ID for folder-based RLS
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        throw new Error('You must be logged in to upload files')
+    }
+
+    // Generate unique filename inside user's folder
     const fileExt = file.name.split('.').pop()
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-    const filePath = fileName
+    const filePath = `${user.id}/${fileName}`
 
     // Upload file
     const { data, error } = await supabase.storage
