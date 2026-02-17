@@ -15,8 +15,8 @@ const Root = styled.div`
 
 const Card = styled.div`
     background-color: #0f172a;
-    border-radius: 12px;
     padding: 16px 24px;
+    border-bottom: 1px solid #334155;
 `
 
 const CardHeader = styled.div`
