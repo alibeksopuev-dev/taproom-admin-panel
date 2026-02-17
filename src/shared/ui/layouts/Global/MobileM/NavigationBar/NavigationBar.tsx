@@ -136,7 +136,7 @@ export const NavigationBar = ({ onClose }: NavigationBarProps) => {
                 <Button
                     variant="outlined"
                     fullWidth
-                    startIcon={<LogoutIcon />}
+                    startIcon={<LogoutIcon sx={{ transform: 'rotate(180deg)' }} />}
                     onClick={handleLogout}
                     sx={{
                         borderColor: '#334155',

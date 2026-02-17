@@ -35,7 +35,7 @@ interface FileUploadInputProps {
     maxSize?: string
 }
 
-export const FileUploadInput = ({ onChange, accept = 'image/*', maxSize = '5MB' }: FileUploadInputProps) => {
+export const FileUploadInput = ({ onChange, accept = 'image/*', maxSize = '1MB' }: FileUploadInputProps) => {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
         if (file) {

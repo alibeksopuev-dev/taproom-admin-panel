@@ -20,7 +20,7 @@ const BaseAutocomplete = <T,>(
                     {...params}
                     label={label}
                     placeholder={placeholder}
-                    size="small"
+                    size="medium"
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             backgroundColor: '#1e293b',

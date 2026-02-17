@@ -23,7 +23,7 @@ const Content = styled.div`
 `
 
 const Action = styled.div`
-    padding: 24px;
+    padding: 16px;
     border-top: 1px solid #334155;
 `
 

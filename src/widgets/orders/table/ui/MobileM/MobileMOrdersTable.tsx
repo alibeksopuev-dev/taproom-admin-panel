@@ -147,13 +147,13 @@ export const MobileMOrdersTable = () => {
                                             label={order.payment_status}
                                             sx={{ bgcolor: paymentColors.bg, color: paymentColors.color, fontWeight: 600, fontSize: 11 }}
                                         />
-                                        {order.payment_method && (
+                                        {/* {order.payment_method && (
                                             <Chip
                                                 size="small"
                                                 label={order.payment_method}
                                                 sx={{ bgcolor: '#1e293b', color: '#94a3b8', fontSize: 11 }}
                                             />
-                                        )}
+                                        )} */}
                                     </Box>
                                 </Box>
                                 <Box sx={{ display: 'flex', gap: 1, mt: 0.5 }}>

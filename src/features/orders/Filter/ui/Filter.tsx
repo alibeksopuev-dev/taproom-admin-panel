@@ -111,11 +111,12 @@ export const Filter = () => {
                                     onClose()
                                 }}
                                 sx={{
+                                    height: '48px',
                                     bgcolor: '#774CFF',
                                     '&:hover': { bgcolor: '#6a3de8' },
                                 }}
                             >
-                                <Typography sx={{ fontWeight: 600 }}>Apply</Typography>
+                                <Typography>Apply</Typography>
                             </Button>
                         }
                     />
