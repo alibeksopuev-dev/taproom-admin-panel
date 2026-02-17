@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import BusinessIcon from '@mui/icons-material/Business'
 import CategoryIcon from '@mui/icons-material/Category'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
-import { useAppDispatch, useAppSelector } from '@shared/lib'
+import { useAppDispatch, useAppSelector, useAbility, routeCaslPermissions } from '@shared/lib'
 import { signOutThunk, selectUser } from '@entities/session'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 
@@ -82,6 +82,14 @@ export const NavigationBar = ({ onClose }: NavigationBarProps) => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const user = useAppSelector(selectUser)
+    const ability = useAbility()
+
+    const visibleNavItems = navItems.filter((item) => {
+        const permission = routeCaslPermissions[item.path]
+        if (!permission) return true
+        const subjects = Array.isArray(permission.subject) ? permission.subject : [permission.subject]
+        return subjects.some((subject) => ability.can(permission.action, subject))
+    })
 
     const handleLogout = () => {
         dispatch(signOutThunk())
@@ -105,7 +113,7 @@ export const NavigationBar = ({ onClose }: NavigationBarProps) => {
             <Divider sx={{ mb: 2, borderColor: '#334155' }} />
 
             <Tabs>
-                {navItems.map(({ path, label, icon }) => (
+                {visibleNavItems.map(({ path, label, icon }) => (
                     <StyledNavLink key={path} to={path} onClick={onClose}>
                         {icon}
                         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>

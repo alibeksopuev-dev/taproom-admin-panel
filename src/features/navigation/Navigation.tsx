@@ -4,6 +4,7 @@ import BusinessIcon from '@mui/icons-material/Business'
 import CategoryIcon from '@mui/icons-material/Category'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import { useAbility, routeCaslPermissions } from '@shared/lib'
 
 const NavItem = styled(NavLink) <{ $active?: boolean }>`
   display: flex;
@@ -57,10 +58,18 @@ const navItems = [
 
 export const Navigation = () => {
   const location = useLocation()
+  const ability = useAbility()
+
+  const visibleNavItems = navItems.filter((item) => {
+    const permission = routeCaslPermissions[item.path]
+    if (!permission) return true
+    const subjects = Array.isArray(permission.subject) ? permission.subject : [permission.subject]
+    return subjects.some((subject) => ability.can(permission.action, subject))
+  })
 
   return (
     <NavList>
-      {navItems.map((item) => {
+      {visibleNavItems.map((item) => {
         const isActive = location.pathname.startsWith(item.path)
         const Icon = item.icon
 
@@ -74,3 +83,4 @@ export const Navigation = () => {
     </NavList>
   )
 }
+

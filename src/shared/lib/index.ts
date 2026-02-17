@@ -1,3 +1,5 @@
 export { useAppDispatch, useAppSelector } from './hooks'
 export { dateHelpers, getPagination, formatPrice, slugify } from './helpers'
 export { useBreakpoint, isMobileBreakpoint, type Breakpoint } from './useBreakpoint'
+export { AbilityProvider, useAbility, Can, isAllowedUser, isSuperAdmin, routeCaslPermissions } from './casl'
+export type { Actions, Subjects, AppAbility, RoutePermission } from './casl'
