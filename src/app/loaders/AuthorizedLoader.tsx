@@ -1,30 +1,44 @@
-import { PropsWithChildren, useEffect, useRef } from 'react'
+import { PropsWithChildren } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { useAppSelector, useAppDispatch, isAllowedUser } from '@shared/lib'
+import { useAppSelector, useAppDispatch } from '@shared/lib'
 import { selectIsAuthenticated, selectUser, signOutThunk } from '@entities/session'
+import { useCheckAccessQuery } from '@entities/adminUsers'
+import { Box, CircularProgress } from '@shared/ui'
 
 export const AuthorizedLoader = ({ children }: PropsWithChildren) => {
     const isAuth = useAppSelector(selectIsAuthenticated)
     const user = useAppSelector(selectUser)
     const location = useLocation()
     const dispatch = useAppDispatch()
-    const hasSignedOut = useRef(false)
 
-    const allowed = isAllowedUser(user?.email ?? undefined)
-
-    useEffect(() => {
-        // If authenticated but not in the allowed list, sign them out
-        if (isAuth && !allowed && !hasSignedOut.current) {
-            hasSignedOut.current = true
-            dispatch(signOutThunk())
-        }
-    }, [isAuth, allowed, dispatch])
+    const { data: adminUser, isLoading } = useCheckAccessQuery(
+        { email: user?.email ?? '' },
+        { skip: !user?.email }
+    )
 
     if (!isAuth) {
         return <Navigate to="/login" state={{ from: location }} replace />
     }
 
-    if (!allowed) {
+    // Wait for access check to complete
+    if (isLoading) {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+                width="100vw"
+                bgcolor="#0f172a"
+            >
+                <CircularProgress />
+            </Box>
+        )
+    }
+
+    // User is authenticated but not in admin_users → sign out and redirect
+    if (!adminUser) {
+        dispatch(signOutThunk())
         return <Navigate to="/login" replace />
     }
 

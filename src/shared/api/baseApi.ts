@@ -102,6 +102,7 @@ export const baseApi = createApi({
         'PricePerSize',
         'Orders',
         'Order',
+        'AdminUsers',
     ],
     endpoints: () => ({}),
 })

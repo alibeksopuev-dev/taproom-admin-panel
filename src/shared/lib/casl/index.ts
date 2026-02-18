@@ -1,5 +1,5 @@
 export { AbilityProvider, Can, useAbility } from './AbilityProvider'
-export { defineAbilityFor, isAllowedUser, isSuperAdmin } from './ability'
+export { defineAbilityFor, isSuperAdmin } from './ability'
 export type { Actions, Subjects, AppAbility } from './ability'
 export { routeCaslPermissions } from './routePermissions'
 export type { RoutePermission } from './routePermissions'

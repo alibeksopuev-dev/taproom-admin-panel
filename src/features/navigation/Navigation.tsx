@@ -4,6 +4,7 @@ import BusinessIcon from '@mui/icons-material/Business'
 import CategoryIcon from '@mui/icons-material/Category'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import PeopleIcon from '@mui/icons-material/People'
 import { useAbility, routeCaslPermissions } from '@shared/lib'
 
 const NavItem = styled(NavLink) <{ $active?: boolean }>`
@@ -54,6 +55,7 @@ const navItems = [
   { path: '/categories', label: 'Categories', icon: CategoryIcon },
   { path: '/menu-categories', label: 'Menu Items', icon: RestaurantMenuIcon },
   { path: '/orders', label: 'Orders', icon: ShoppingBagIcon },
+  { path: '/admin-users', label: 'Admin Users', icon: PeopleIcon },
 ]
 
 export const Navigation = () => {

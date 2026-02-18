@@ -17,6 +17,7 @@ import { OrganizationCreate } from '@pages/organizationCreate'
 import { OrganizationEdit } from '@pages/organizationEdit'
 import { MenuCategories } from '@pages/menuCategories'
 import { Orders } from '@pages/orders'
+import { AdminUsers } from '@pages/adminUsers'
 
 export const router = createBrowserRouter([
     {
@@ -103,6 +104,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'orders',
                         element: <Orders />,
+                    },
+                    {
+                        path: 'admin-users',
+                        element: <AdminUsers />,
                     },
                 ],
             },

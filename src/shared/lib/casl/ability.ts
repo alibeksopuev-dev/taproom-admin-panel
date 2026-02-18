@@ -1,5 +1,5 @@
 import { AbilityBuilder, createMongoAbility, MongoAbility, MongoQuery } from '@casl/ability'
-import { User } from '@supabase/supabase-js'
+import type { AdminUserRole } from '@entities/adminUsers'
 
 // Subjects (entities) that can be accessed
 export type Subjects =
@@ -8,6 +8,7 @@ export type Subjects =
     | 'menu_items'
     | 'price_per_size'
     | 'orders'
+    | 'admin_users'
     | 'all'
 
 // Actions that can be performed
@@ -16,40 +17,30 @@ export type Actions = 'read' | 'create' | 'update' | 'delete' | 'manage'
 // Ability type
 export type AppAbility = MongoAbility<[Actions, Subjects], MongoQuery>
 
-// Super admin email
+// Super admin email — hardcoded as an ultimate safety net
 const SUPER_ADMIN_EMAIL = 'alibeksopuev@gmail.com'
-
-// Allowed emails that can access the admin panel
-// Add new team members here
-const ALLOWED_EMAILS: string[] = [
-    SUPER_ADMIN_EMAIL,
-    'test-client@example.com'
-    // 'teammate@example.com',
-]
-
-export function isAllowedUser(email: string | undefined): boolean {
-    if (!email) return false
-    return ALLOWED_EMAILS.includes(email)
-}
 
 export function isSuperAdmin(email: string | undefined): boolean {
     return email === SUPER_ADMIN_EMAIL
 }
 
-// Create ability from user
-export function defineAbilityFor(user: User | null): AppAbility {
+/**
+ * Create CASL ability based on user's role from the admin_users table.
+ * - `super_admin`: full access to everything
+ * - `admin`: can manage menu/categories/orders but NOT organizations or admin_users
+ * - `null`: no permissions (blocked)
+ */
+export function defineAbilityFor(role: AdminUserRole | null): AppAbility {
     const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility)
 
-    if (!user || !isAllowedUser(user.email)) {
-        // No permissions for unauthenticated or unauthorized users
+    if (!role) {
         return build()
     }
 
-    if (isSuperAdmin(user.email)) {
-        // Super admin gets full access
+    if (role === 'super_admin') {
         can('manage', 'all')
     } else {
-        // Regular allowed users — can manage menu but not organizations
+        // Regular admin — can manage menu but not organizations or admin_users
         can('read', 'all')
         can('create', 'categories')
         can('update', 'categories')
