@@ -21,7 +21,7 @@ export const createColumns = (
                             {discount.user_name || 'Unknown'}
                         </Typography>
                         <Typography sx={{ color: '#6b7280', fontSize: 11 }}>
-                            {discount.user_id.slice(0, 8)}…
+                            {discount.user_email || discount.user_id.slice(0, 8) + '…'}
                         </Typography>
                     </Box>
                 )

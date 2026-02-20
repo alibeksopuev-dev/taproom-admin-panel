@@ -40,14 +40,17 @@ export const discountsApi = baseApi.injectEndpoints({
                 if (userIds.length > 0) {
                     const { data: profiles } = await supabase
                         .from('profiles')
-                        .select('id, display_name')
+                        .select('id, display_name, email')
                         .in('id', userIds)
 
                     if (profiles) {
-                        const profileMap = new Map(profiles.map((p: { id: string; display_name: string | null }) => [p.id, p.display_name]))
+                        const profileMap = new Map(profiles.map((p: { id: string; display_name: string | null; email: string | null }) =>
+                            [p.id, { display_name: p.display_name, email: p.email }]
+                        ))
                         enrichedData = (data ?? []).map((d: UserDiscount) => ({
                             ...d,
-                            user_name: profileMap.get(d.user_id) || null,
+                            user_name: profileMap.get(d.user_id)?.display_name || null,
+                            user_email: profileMap.get(d.user_id)?.email || null,
                         }))
                     }
                 }

@@ -18,7 +18,7 @@ interface FormValues {
 interface UserOption {
     id: string
     display_name: string | null
-    phone: string | null
+    email: string | null
 }
 
 export const Create = () => {
@@ -47,10 +47,10 @@ export const Create = () => {
         const fetchUsers = async () => {
             setIsSearching(true)
             try {
-                let query = supabase.from('profiles').select('id, phone, display_name').limit(20)
+                let query = supabase.from('profiles').select('id, email, display_name').limit(20)
 
                 if (searchUserQuery) {
-                    query = query.or(`phone.ilike.%${searchUserQuery}%,display_name.ilike.%${searchUserQuery}%`)
+                    query = query.or(`email.ilike.%${searchUserQuery}%,display_name.ilike.%${searchUserQuery}%`)
                 }
 
                 const { data, error } = await query
@@ -118,16 +118,16 @@ export const Create = () => {
                                         onChange={(_, newValue: UserOption | null) => {
                                             field.onChange(newValue?.id || '')
                                         }}
-                                        getOptionLabel={(option) => option.display_name || option.phone || option.id}
-                                        label="Customer (Search by name/phone) *"
+                                        getOptionLabel={(option) => option.display_name || option.email || option.id}
+                                        label="Customer *"
                                         isOptionEqualToValue={(option, val) => option.id === val.id}
                                         renderOption={(props, option) => (
                                             <MenuItem {...props} key={option.id}>
                                                 <Box>
                                                     <Typography variant="body1">{option.display_name || 'No Name'}</Typography>
-                                                    {option.phone && (
+                                                    {option.email && (
                                                         <Typography variant="body2" color="text.secondary">
-                                                            {option.phone}
+                                                            {option.email}
                                                         </Typography>
                                                     )}
                                                 </Box>
