@@ -1,0 +1,1 @@
+export { LaptopDiscountsTable } from './LaptopDiscountsTable'

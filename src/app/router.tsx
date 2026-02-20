@@ -17,6 +17,9 @@ import { OrganizationCreate } from '@pages/organizationCreate'
 import { OrganizationEdit } from '@pages/organizationEdit'
 import { MenuCategories } from '@pages/menuCategories'
 import { Orders } from '@pages/orders'
+import { Discounts } from '@pages/discounts'
+import { DiscountCreate } from '@pages/discountCreate'
+import { DiscountEdit } from '@pages/discountEdit'
 
 export const router = createBrowserRouter([
     {
@@ -104,6 +107,18 @@ export const router = createBrowserRouter([
                         path: 'orders',
                         element: <Orders />,
                     },
+                    {
+                        path: 'discounts',
+                        element: <Discounts />,
+                    },
+                    {
+                        path: 'discounts/create',
+                        element: <DiscountCreate />,
+                    },
+                    {
+                        path: 'discounts/:id',
+                        element: <DiscountEdit />,
+                    }
                 ],
             },
         ],

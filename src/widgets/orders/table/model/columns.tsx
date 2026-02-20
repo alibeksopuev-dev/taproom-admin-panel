@@ -62,11 +62,21 @@ export const createColumns = (onStatusChange: (order: Order, status: OrderStatus
     columnHelper.accessor(({ total_amount }) => total_amount, {
         id: 'total_amount',
         header: 'Amount',
-        cell: ({ getValue }) => (
-            <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
-                {getValue().toLocaleString('en-US')} VND
-            </Typography>
-        ),
+        cell: ({ row, getValue }) => {
+            const order = row.original
+            return (
+                <Box>
+                    <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
+                        {getValue().toLocaleString('en-US')} VND
+                    </Typography>
+                    {!!order.discount_percent && !!order.discount_amount && order.discount_amount > 0 && (
+                        <Typography sx={{ color: '#22c55e', fontSize: 11 }}>
+                            -{order.discount_amount.toLocaleString('en-US')} VND ({order.discount_percent}%)
+                        </Typography>
+                    )}
+                </Box>
+            )
+        },
         size: 130,
     }),
     columnHelper.accessor(({ payment_method }) => payment_method, {

@@ -8,6 +8,7 @@ export type Subjects =
     | 'menu_items'
     | 'price_per_size'
     | 'orders'
+    | 'discounts'
     | 'all'
 
 // Actions that can be performed
@@ -59,6 +60,9 @@ export function defineAbilityFor(user: User | null): AppAbility {
         can('update', 'price_per_size')
         can('read', 'orders')
         can('update', 'orders')
+        can('create', 'discounts')
+        can('update', 'discounts')
+        can('delete', 'discounts')
     }
 
     return build()

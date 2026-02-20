@@ -138,9 +138,16 @@ export const MobileMOrdersTable = () => {
                             </CardHeader>
                             <CardBody>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
-                                        {order.total_amount.toLocaleString('en-US')} VND
-                                    </Typography>
+                                    <Box>
+                                        <Typography sx={{ fontWeight: 500, color: '#f1f5f9' }}>
+                                            {order.total_amount.toLocaleString('en-US')} VND
+                                        </Typography>
+                                        {!!order.discount_percent && !!order.discount_amount && order.discount_amount > 0 && (
+                                            <Typography sx={{ color: '#22c55e', fontSize: 11 }}>
+                                                -{order.discount_amount.toLocaleString('en-US')} VND ({order.discount_percent}%)
+                                            </Typography>
+                                        )}
+                                    </Box>
                                     <Box sx={{ display: 'flex', gap: 0.5 }}>
                                         <Chip
                                             size="small"

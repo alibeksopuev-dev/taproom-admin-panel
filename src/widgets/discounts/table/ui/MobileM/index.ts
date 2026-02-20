@@ -1,0 +1,1 @@
+export { MobileMDiscountsTable } from './MobileMDiscountsTable'

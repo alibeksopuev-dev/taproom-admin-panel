@@ -10,4 +10,5 @@ export const routeCaslPermissions: Record<string, RoutePermission> = {
     '/categories': { action: 'read', subject: 'categories' },
     '/menu-categories': { action: 'read', subject: 'menu_items' },
     '/orders': { action: 'read', subject: 'orders' },
+    '/discounts': { action: 'read', subject: 'discounts' },
 }

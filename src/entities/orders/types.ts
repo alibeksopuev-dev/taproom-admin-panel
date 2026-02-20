@@ -1,6 +1,8 @@
 export interface Order {
     id: string
     organization_id: string
+    discount_percent?: number | null
+    discount_amount?: number | null
     user_id: string | null
     order_number: string
     status: OrderStatus

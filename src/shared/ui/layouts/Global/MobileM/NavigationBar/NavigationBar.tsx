@@ -9,6 +9,7 @@ import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { useAppDispatch, useAppSelector, useAbility, routeCaslPermissions } from '@shared/lib'
 import { signOutThunk, selectUser } from '@entities/session'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard'
 
 const Root = styled.div`
     display: flex;
@@ -76,6 +77,7 @@ const navItems = [
     { path: '/categories', label: 'Categories', icon: <CategoryIcon /> },
     { path: '/menu-categories', label: 'Menu Items', icon: <RestaurantMenuIcon /> },
     { path: '/orders', label: 'Orders', icon: <ShoppingBagIcon /> },
+    { path: '/discounts', label: 'Discounts', icon: <CardGiftcardIcon /> },
 ]
 
 export const NavigationBar = ({ onClose }: NavigationBarProps) => {
