@@ -90,12 +90,14 @@ export const MobileMDiscountsTable = () => {
                         <Card key={discount.id} onClick={() => navigate(`/discounts/${discount.id}`)}>
                             <CardHeader>
                                 <Box>
-                                    <Typography sx={{ color: '#f1f5f9', fontWeight: 500, fontSize: 14 }} mb={0.5}>
+                                    <Typography sx={{ color: '#f1f5f9', fontWeight: 500, fontSize: 14 }}>
                                         {discount.user_name || discount.user_id.slice(0, 8) + '…'}
                                     </Typography>
-                                    <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
-                                        {discount.label || 'No label'}
-                                    </Typography>
+                                    {discount.user_email && (
+                                        <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
+                                            {discount.user_email}
+                                        </Typography>
+                                    )}
                                     <Typography sx={{ color: '#6b7280', fontSize: 11, mt: 0.5 }}>
                                         Created {format(new Date(discount.created_at + 'Z'), 'dd MMM yyyy')}
                                     </Typography>
