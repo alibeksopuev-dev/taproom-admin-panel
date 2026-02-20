@@ -22,6 +22,10 @@ export const ButtonContainer = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
+  
+  @media (min-width: 900px) {
+    left: 236px;
+  }
   right: 0;
   padding: 16px;
   background-color: #1e293b;
