@@ -12,11 +12,14 @@ import {
     Box,
     Typography,
 } from '@shared/ui'
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import Button from '@mui/material/Button'
 import { getCoreRowModel, getPaginationRowModel, useReactTable } from '@tanstack/react-table'
 import { createColumns } from '../../model/columns'
 import { StyledBodyRow, StyledFooter, StyledHeaderRow, StyledTableContainer, Loading } from './styled'
 
 const DEFAULT_ROWS_PER_PAGE = 10
+const DISCOUNT_PRESETS = [5, 10, 15, 20]
 
 export const LaptopOrdersTable = () => {
     const [page, setPage] = useState(1)
@@ -27,6 +30,9 @@ export const LaptopOrdersTable = () => {
     const paymentFilter = searchParams.get('payment_status') || ''
 
     const [updateStatus] = ordersApi.useUpdateOrderStatusMutation()
+    const [applyDiscount, { isLoading: isApplyingDiscount }] = ordersApi.useApplyOrderDiscountMutation()
+
+    const [discountTarget, setDiscountTarget] = useState<Order | null>(null)
 
     const handleStatusChange = async (order: Order, newStatus: OrderStatus) => {
         try {
@@ -36,7 +42,24 @@ export const LaptopOrdersTable = () => {
         }
     }
 
-    const columns = useMemo(() => createColumns(handleStatusChange), [])
+    const handleApplyDiscount = async (percent: number) => {
+        if (!discountTarget) return
+        try {
+            await applyDiscount({
+                id: discountTarget.id,
+                discount_percent: percent,
+                total_amount: discountTarget.total_amount,
+            }).unwrap()
+            setDiscountTarget(null)
+        } catch (error) {
+            console.error('Failed to apply discount:', error)
+        }
+    }
+
+    const columns = useMemo(() => createColumns(
+        handleStatusChange,
+        (order) => setDiscountTarget(order),
+    ), [])
 
     const { data, isLoading } = ordersApi.useGetOrdersQuery({
         limit: rowsPerPage,
@@ -88,60 +111,115 @@ export const LaptopOrdersTable = () => {
     }
 
     return (
-        <TableV2
-            table={table}
-            components={{
-                TableContainer: StyledTableContainer,
-                Table: ({ children }) => <MuiTable stickyHeader>{children}</MuiTable>,
-                Header: MuiTableHead,
-                HeaderRow: StyledHeaderRow,
-                HeaderCell: ({ children, original }) => (
-                    <MuiTableCell
-                        sx={{
-                            color: '#9ca3af',
-                            backgroundColor: '#1e293b',
-                            borderBottom: '1px solid #334155',
-                            width: original?.getSize(),
-                            position: 'relative',
-                        }}
-                    >
-                        {children}
-                    </MuiTableCell>
-                ),
-                BodyRow: ({ children }) => (
-                    <StyledBodyRow>
-                        {children}
-                    </StyledBodyRow>
-                ),
-                BodyCell: ({ children, original }) => (
-                    <MuiTableCell
-                        sx={{
-                            borderBottom: '1px solid #334155',
-                            width: original?.column.getSize(),
-                        }}
-                    >
-                        {children}
-                    </MuiTableCell>
-                ),
-                FooterContainer: StyledFooter,
-                Pagination: () => (
-                    <>
-                        <SelectRowsPerPage
-                            rowsCount={rowsCount}
-                            rowsPerPage={rowsPerPage}
-                            onRowsPerPageChange={(newRowsPerPage) => {
-                                setRowsPerPage(newRowsPerPage)
-                                setPage(1)
+        <>
+            <TableV2
+                table={table}
+                components={{
+                    TableContainer: StyledTableContainer,
+                    Table: ({ children }) => <MuiTable stickyHeader>{children}</MuiTable>,
+                    Header: MuiTableHead,
+                    HeaderRow: StyledHeaderRow,
+                    HeaderCell: ({ children, original }) => (
+                        <MuiTableCell
+                            sx={{
+                                color: '#9ca3af',
+                                backgroundColor: '#1e293b',
+                                borderBottom: '1px solid #334155',
+                                width: original?.getSize(),
+                                position: 'relative',
                             }}
-                        />
-                        <Pagination
-                            count={table.getPageCount() || 0}
-                            page={page}
-                            onChange={(_, newPage) => setPage(newPage)}
-                        />
-                    </>
-                ),
-            }}
-        />
+                        >
+                            {children}
+                        </MuiTableCell>
+                    ),
+                    BodyRow: ({ children }) => (
+                        <StyledBodyRow>
+                            {children}
+                        </StyledBodyRow>
+                    ),
+                    BodyCell: ({ children, original }) => (
+                        <MuiTableCell
+                            sx={{
+                                borderBottom: '1px solid #334155',
+                                width: original?.column.getSize(),
+                            }}
+                        >
+                            {children}
+                        </MuiTableCell>
+                    ),
+                    FooterContainer: StyledFooter,
+                    Pagination: () => (
+                        <>
+                            <SelectRowsPerPage
+                                rowsCount={rowsCount}
+                                rowsPerPage={rowsPerPage}
+                                onRowsPerPageChange={(newRowsPerPage) => {
+                                    setRowsPerPage(newRowsPerPage)
+                                    setPage(1)
+                                }}
+                            />
+                            <Pagination
+                                count={table.getPageCount() || 0}
+                                page={page}
+                                onChange={(_, newPage) => setPage(newPage)}
+                            />
+                        </>
+                    ),
+                }}
+            />
+
+            {/* Discount Dialog */}
+            <Dialog
+                open={!!discountTarget}
+                onClose={() => setDiscountTarget(null)}
+                PaperProps={{
+                    sx: {
+                        bgcolor: '#1e293b',
+                        color: '#f1f5f9',
+                        borderRadius: 3,
+                        minWidth: 300,
+                    },
+                }}
+            >
+                <DialogTitle sx={{ pb: 1 }}>
+                    Apply Discount
+                    {discountTarget && (
+                        <Typography sx={{ color: '#9ca3af', fontSize: 13 }}>
+                            {discountTarget.order_number} · {discountTarget.total_amount.toLocaleString('en-US')} VND
+                        </Typography>
+                    )}
+                </DialogTitle>
+                <DialogContent>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', pt: 1 }}>
+                        {DISCOUNT_PRESETS.map((percent) => (
+                            <Button
+                                key={percent}
+                                variant="outlined"
+                                disabled={isApplyingDiscount}
+                                onClick={() => handleApplyDiscount(percent)}
+                                sx={{
+                                    flex: 1,
+                                    minWidth: 60,
+                                    color: '#22c55e',
+                                    borderColor: '#22c55e40',
+                                    fontWeight: 600,
+                                    '&:hover': { borderColor: '#22c55e', bgcolor: '#14532d40' },
+                                }}
+                            >
+                                {percent}%
+                            </Button>
+                        ))}
+                    </Box>
+                </DialogContent>
+                <DialogActions sx={{ px: 3, pb: 2 }}>
+                    <Button
+                        onClick={() => setDiscountTarget(null)}
+                        sx={{ color: '#9ca3af', textTransform: 'none' }}
+                    >
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     )
 }

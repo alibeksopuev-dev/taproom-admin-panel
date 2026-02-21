@@ -13,6 +13,12 @@ type UpdateOrderStatusRequest = {
     status: OrderStatus
 }
 
+type ApplyOrderDiscountRequest = {
+    id: string
+    discount_percent: number
+    total_amount: number
+}
+
 export const ordersApi = baseApi.injectEndpoints({
     endpoints: (create) => ({
         getOrders: create.query<OrdersResponse, GetOrdersParams>({
@@ -80,6 +86,34 @@ export const ordersApi = baseApi.injectEndpoints({
                 const { data, error } = await supabase
                     .from('orders')
                     .update(updateData)
+                    .eq('id', id)
+                    .select('*, items:order_items(*)')
+                    .single()
+
+                if (error) {
+                    return { error: { status: error.code, data: error.message } }
+                }
+
+                return { data }
+            },
+            invalidatesTags: (_result, _error, { id }) => [
+                'Orders',
+                { type: 'Order', id },
+            ],
+        }),
+
+        applyOrderDiscount: create.mutation<Order, ApplyOrderDiscountRequest>({
+            queryFn: async ({ id, discount_percent, total_amount }) => {
+                const discount_amount = Math.round(total_amount * discount_percent / (100 + discount_percent))
+
+                const { data, error } = await supabase
+                    .from('orders')
+                    .update({
+                        discount_percent,
+                        discount_amount,
+                        total_amount: total_amount - discount_amount,
+                        updated_at: new Date().toISOString(),
+                    })
                     .eq('id', id)
                     .select('*, items:order_items(*)')
                     .single()
